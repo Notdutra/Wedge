@@ -1,0 +1,280 @@
+"use client";
+
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Clock,
+  Search,
+  Edit,
+  Trash2,
+  Package,
+  AlertTriangle,
+  Plus,
+  Filter,
+} from "lucide-react";
+import { useDemoContext, useMixedData } from "@/contexts/demo-context";
+import { useRestaurantContext } from "@/contexts/restaurant-context";
+
+export function InventoryPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const { isDemoMode, demoData } = useDemoContext();
+  const { inventory } = useRestaurantContext();
+
+  // Use the new hook to get consistent data
+  const currentInventory = useMixedData(demoData.inventory, inventory);
+
+  const lowStockItems = currentInventory.filter(
+    (item) => item.status === "low",
+  );
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "low":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "good":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-neutral-100 text-neutral-800 border-neutral-200";
+    }
+  };
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-neutral-900">
+            Inventory
+          </h1>
+          <p className="text-neutral-600">
+            Manage your restaurant&apos;s inventory and stock levels
+          </p>
+        </div>
+        <Button>
+          <Plus className="w-4 h-4 mr-2" />
+          Add Item
+        </Button>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card className="border-neutral-200 bg-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-neutral-600">
+              Total Items
+            </CardTitle>
+            <Package className="h-4 w-4 text-lime-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-neutral-900">
+              {currentInventory.length}
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-neutral-200 bg-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-neutral-600">
+              Low Stock
+            </CardTitle>
+            <AlertTriangle className="h-4 w-4 text-lime-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-neutral-900">
+              {lowStockItems.length}
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-neutral-200 bg-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-neutral-600">
+              Categories
+            </CardTitle>
+            <Filter className="h-4 w-4 text-lime-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-neutral-900">4</div>
+          </CardContent>
+        </Card>
+        <Card className="border-neutral-200 bg-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-neutral-600">
+              Total Value
+            </CardTitle>
+            <Package className="h-4 w-4 text-lime-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-neutral-900">$2,847</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Tabs defaultValue="all" className="space-y-6">
+        <div className="flex justify-between items-center">
+          <TabsList>
+            <TabsTrigger value="all">All Items</TabsTrigger>
+            <TabsTrigger value="low-stock">Low Stock</TabsTrigger>
+            <TabsTrigger value="categories">Categories</TabsTrigger>
+          </TabsList>
+          <div className="flex items-center space-x-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-4 h-4" />
+              <Input
+                placeholder="Search inventory..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 w-64"
+              />
+            </div>
+          </div>
+        </div>
+
+        <TabsContent value="all">
+          <Card className="border-neutral-200 bg-white">
+            <CardHeader>
+              <CardTitle className="text-neutral-900">
+                All Inventory Items
+              </CardTitle>
+              <CardDescription>Complete list of your inventory</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {currentInventory.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-lime-100 rounded-lg flex items-center justify-center">
+                        <Package className="w-6 h-6 text-lime-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-neutral-900">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-neutral-600">
+                          {item.category} • {item.cost}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <div className="text-right">
+                        <p className="font-medium text-neutral-900">
+                          {item.current} {item.unit}
+                        </p>
+                        <p className="text-sm text-neutral-600">
+                          Min: {item.minimum}
+                        </p>
+                      </div>
+                      <Badge className={getStatusColor(item.status)}>
+                        {item.status === "low" ? "Low Stock" : "In Stock"}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="low-stock">
+          <Card className="border-neutral-200 bg-white">
+            <CardHeader>
+              <CardTitle className="flex items-center text-neutral-900">
+                <AlertTriangle className="w-5 h-5 mr-2 text-red-600" />
+                Low Stock Items
+              </CardTitle>
+              <CardDescription>Items that need to be restocked</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {lowStockItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-4 border border-red-200 rounded-lg bg-red-50"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                        <AlertTriangle className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-neutral-900">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-neutral-600">
+                          {item.category} • {item.cost}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <div className="text-right">
+                        <p className="font-medium text-red-600">
+                          {item.current} {item.unit}
+                        </p>
+                        <p className="text-sm text-neutral-600">
+                          Min: {item.minimum}
+                        </p>
+                      </div>
+                      <Button size="sm">Reorder</Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="categories">
+          <div className="grid gap-6 md:grid-cols-2">
+            {["Meat", "Vegetables", "Dairy", "Pantry"].map((category) => (
+              <Card key={category} className="border-neutral-200 bg-white">
+                <CardHeader>
+                  <CardTitle className="text-neutral-900">{category}</CardTitle>
+                  <CardDescription>
+                    {
+                      currentInventory.filter(
+                        (item) => item.category === category,
+                      ).length
+                    }{" "}
+                    items
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {currentInventory
+                      .filter((item) => item.category === category)
+                      .map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-neutral-900">{item.name}</span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm text-neutral-600">
+                              {item.current} {item.unit}
+                            </span>
+                            <Badge className={getStatusColor(item.status)}>
+                              {item.status === "low" ? "Low" : "OK"}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
