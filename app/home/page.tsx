@@ -1,4 +1,5 @@
 import { WedgeLogo } from "@/components/wedge-logo";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -44,11 +45,12 @@ export default function HomePage() {
 
           {/* Right Column: Image/Illustration Placeholder */}
           <div className="flex-c items-center md:flex justify-center p-6">
-            <div className="w-full max-w-md h-80 rounded-2xl shadow-xl overflow-hidden">
-              <img
-                src="https://media.istockphoto.com/id/1185198184/photo/cashier-at-work.jpg?s=612x612&w=0&k=20&c=C04zFpYJY0k8aA_OImXdzYppbgC_dcsoqWHYekD84MA="
+            <div className="relative w-full max-w-md h-80 rounded-2xl shadow-xl overflow-hidden">
+              <Image
+                src="/wedgeDemo.png"
+                fill
                 alt="Cashier using POS system at a restaurant counter"
-                className="w-full h-full object-cover"
+                className="object-cover"
               />
             </div>
           </div>

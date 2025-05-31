@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/login-form";
+import { SignInForm } from "@/components/forms/sign-in-form";
 import { WedgeLogo } from "@/components/wedge-logo";
 import Link from "next/link";
 
@@ -35,7 +35,7 @@ export default function SignInPage() {
               Access your Wedge account.
             </p>
           </div>
-          <LoginForm />
+          <SignInForm />
         </div>
       </main>
 

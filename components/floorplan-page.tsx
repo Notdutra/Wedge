@@ -277,7 +277,7 @@ export function FloorPlanPage() {
           <CardHeader>
             <CardTitle className="text-neutral-900">Table Status</CardTitle>
             <CardDescription>Current table information</CardDescription>
-            <p className="text-5xl">todo: add filter here</p>
+            {/* <p className="text-5xl">todo: add filter here</p> */}
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
