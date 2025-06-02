@@ -10,16 +10,16 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function LoginForm() {
+export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSigninPassword, setShowSigninPassword] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate login
+    // Simulate signin
     setTimeout(() => {
       setIsLoading(false);
       router.push("/dashboard");
@@ -28,20 +28,20 @@ export function LoginForm() {
 
   return (
     <Card className="w-full shadow-lg border-0 bg-white/80 backdrop-blur-sm overflow-hidden mb-6">
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSignin}>
         <CardContent
           className="space-y-4 px-4 sm:px-6 pt-6"
           style={{ minHeight: "140px" }}
         >
           <div className="space-y-2">
             <Label
-              htmlFor="login-email"
+              htmlFor="sign-email"
               className="text-sm sm:text-base text-neutral-700"
             >
               Email
             </Label>
             <Input
-              id="login-email"
+              id="sign-email"
               type="email"
               placeholder="manager@restaurant.com"
               required
@@ -50,15 +50,15 @@ export function LoginForm() {
           </div>
           <div className="space-y-2">
             <Label
-              htmlFor="login-password"
+              htmlFor="sign-password"
               className="text-sm sm:text-base text-neutral-700"
             >
               Password
             </Label>
             <div className="relative">
               <Input
-                id="login-password"
-                type={showLoginPassword ? "text" : "password"}
+                id="sign-password"
+                type={showSigninPassword ? "text" : "password"}
                 placeholder="••••••••"
                 required
                 className="pr-12 h-11 sm:h-12 text-base touch-manipulation"
@@ -68,15 +68,15 @@ export function LoginForm() {
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent min-w-[44px] touch-manipulation"
-                onClick={() => setShowLoginPassword(!showLoginPassword)}
+                onClick={() => setShowSigninPassword(!showSigninPassword)}
               >
-                {showLoginPassword ? (
+                {showSigninPassword ? (
                   <EyeOff className="h-4 w-4 text-neutral-500" />
                 ) : (
                   <Eye className="h-4 w-4 text-neutral-500" />
                 )}
                 <span className="sr-only">
-                  {showLoginPassword ? "Hide password" : "Show password"}
+                  {showSigninPassword ? "Hide password" : "Show password"}
                 </span>
               </Button>
             </div>
