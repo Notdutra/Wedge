@@ -35,3 +35,10 @@ dist-ssr
 
 # Tool-specific files
 .eslintcache
+
+# Lockfiles (keep only pnpm's)
+package-lock.json
+yarn.lock
+
+# pnpm store (if local)
+.pnpm-store
