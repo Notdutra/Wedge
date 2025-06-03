@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import type React from 'react'
+import type React from "react";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -22,57 +22,77 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { useRestaurantContext } from '@/contexts/restaurant-context'
-import { Plus } from 'lucide-react'
+} from "@/components/ui/dialog";
+import { useRestaurantContext } from "@/contexts/restaurant-context";
+import { Plus, Calendar } from "lucide-react";
 
-export function AddReservationForm() {
-  const { addReservation } = useRestaurantContext()
-  const [open, setOpen] = useState(false)
+export function AddReservationForm({
+  renderTrigger,
+  variant = "plus",
+}: {
+  renderTrigger?: (props: { onClick: () => void }) => React.ReactNode;
+  variant?: "plus" | "calendar";
+}) {
+  const { addReservation } = useRestaurantContext();
+  const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    party: '',
-    time: '',
-    date: 'Today',
-    phone: '',
-    email: '',
-    table: '',
-    notes: '',
-    status: 'pending',
-  })
+    name: "",
+    party: "",
+    time: "",
+    date: "Today",
+    phone: "",
+    email: "",
+    table: "",
+    notes: "",
+    status: "pending",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     addReservation({
       ...formData,
       party: Number.parseInt(formData.party),
-    })
+    });
     setFormData({
-      name: '',
-      party: '',
-      time: '',
-      date: 'Today',
-      phone: '',
-      email: '',
-      table: '',
-      notes: '',
-      status: 'pending',
-    })
-    setOpen(false)
-  }
+      name: "",
+      party: "",
+      time: "",
+      date: "Today",
+      phone: "",
+      email: "",
+      table: "",
+      notes: "",
+      status: "pending",
+    });
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          New Reservation
-        </Button>
+        {renderTrigger ? (
+          renderTrigger({ onClick: () => setOpen(true) })
+        ) : variant === "calendar" ? (
+          <Button
+            className="h-16 sm:h-20 flex-col bg-lime-600 hover:bg-lime-700 text-white min-h-[44px] touch-manipulation"
+            onClick={() => setOpen(true)}
+          >
+            <Calendar className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
+            <span className="text-xs sm:text-sm">New Reservation</span>
+          </Button>
+        ) : (
+          <Button onClick={() => setOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            New Reservation
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add New Reservation</DialogTitle>
-          <DialogDescription>Create a new reservation for your restaurant.</DialogDescription>
+          <DialogDescription>
+            Create a new reservation for your restaurant.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
@@ -83,7 +103,9 @@ export function AddReservationForm() {
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -98,7 +120,9 @@ export function AddReservationForm() {
                 min="1"
                 max="20"
                 value={formData.party}
-                onChange={(e) => setFormData((prev) => ({ ...prev, party: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, party: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -111,7 +135,9 @@ export function AddReservationForm() {
                 id="time"
                 type="time"
                 value={formData.time}
-                onChange={(e) => setFormData((prev) => ({ ...prev, time: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, time: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -122,7 +148,9 @@ export function AddReservationForm() {
               </Label>
               <Select
                 value={formData.date}
-                onValueChange={(value) => setFormData((prev) => ({ ...prev, date: value }))}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, date: value }))
+                }
               >
                 <SelectTrigger className="col-span-3">
                   <SelectValue />
@@ -142,7 +170,9 @@ export function AddReservationForm() {
                 id="phone"
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, phone: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -155,7 +185,9 @@ export function AddReservationForm() {
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, email: e.target.value }))
+                }
                 className="col-span-3"
               />
             </div>
@@ -165,7 +197,9 @@ export function AddReservationForm() {
               </Label>
               <Select
                 value={formData.table}
-                onValueChange={(value) => setFormData((prev) => ({ ...prev, table: value }))}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, table: value }))
+                }
               >
                 <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Select table" />
@@ -186,7 +220,9 @@ export function AddReservationForm() {
               <Textarea
                 id="notes"
                 value={formData.notes}
-                onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, notes: e.target.value }))
+                }
                 className="col-span-3"
                 placeholder="Special requests, allergies, etc."
               />
@@ -200,5 +236,5 @@ export function AddReservationForm() {
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

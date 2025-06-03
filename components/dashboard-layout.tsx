@@ -41,50 +41,50 @@ const allNavigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home, key: "dashboard" },
   {
     name: "Orders",
-    href: "/dashboard/orders",
+    href: "/orders",
     icon: ShoppingCart,
     key: "orders",
   },
   {
     name: "Reservations",
-    href: "/dashboard/reservations",
+    href: "/reservations",
     icon: Calendar,
     key: "reservations",
   },
   {
     name: "Floor Plan",
-    href: "/dashboard/floorplan",
+    href: "/floorplan",
     icon: Grid3X3,
     key: "floorplan",
   },
   {
     name: "Menu Management",
-    href: "/dashboard/menu",
+    href: "/menu",
     icon: ChefHat,
     key: "menu",
   },
-  { name: "Staff", href: "/dashboard/staff", icon: Users, key: "staff" },
+  { name: "Staff", href: "/staff", icon: Users, key: "staff" },
   {
     name: "Analytics",
-    href: "/dashboard/analytics",
+    href: "/analytics",
     icon: BarChart3,
     key: "analytics",
   },
   {
     name: "Payments",
-    href: "/dashboard/payments",
+    href: "/payments",
     icon: CreditCard,
     key: "payments",
   },
   {
     name: "Inventory",
-    href: "/dashboard/inventory",
+    href: "/inventory",
     icon: Clock,
     key: "inventory",
   },
   {
     name: "Settings",
-    href: "/dashboard/settings",
+    href: "/settings",
     icon: Settings,
     key: "settings",
   },
@@ -257,9 +257,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                   </div>
-                  <DropdownMenuItem
-                    onClick={() => router.push("/dashboard/settings")}
-                  >
+                  <DropdownMenuItem onClick={() => router.push("/settings")}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
                   </DropdownMenuItem>
