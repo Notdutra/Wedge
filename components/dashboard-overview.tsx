@@ -22,6 +22,10 @@ import {
 } from "lucide-react";
 import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
+import { AddOrderForm } from "./forms/add-order-form";
+import { AddReservationForm } from "@/components/forms/add-reservation-form";
+import { AddMenuItemForm } from "@/components/forms/add-menu-item-form";
+import { AddStaffForm } from "@/components/forms/add-staff-form";
 
 export function DashboardOverview() {
   const { isDemoMode, demoData } = useDemoContext();
@@ -146,47 +150,6 @@ export function DashboardOverview() {
           </Card>
         ))}
       </div>
-
-      {/* Quick Actions */}
-      <Card className="border-neutral-200 bg-white">
-        <CardHeader>
-          <CardTitle className="text-lg sm:text-xl text-neutral-900">
-            Quick Actions
-          </CardTitle>
-          <CardDescription className="text-sm">
-            Common tasks and shortcuts
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-            <Button className="h-16 sm:h-20 flex-col bg-lime-600 hover:bg-lime-700 text-white min-h-[44px] touch-manipulation">
-              <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
-              <span className="text-xs sm:text-sm">New Order</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-16 sm:h-20 flex-col border-lime-200 text-lime-700 hover:bg-lime-50 min-h-[44px] touch-manipulation"
-            >
-              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
-              <span className="text-xs sm:text-sm">Add Reservation</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-16 sm:h-20 flex-col border-lime-200 text-lime-700 hover:bg-lime-50 min-h-[44px] touch-manipulation"
-            >
-              <Users className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
-              <span className="text-xs sm:text-sm">Manage Tables</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-16 sm:h-20 flex-col border-lime-200 text-lime-700 hover:bg-lime-50 min-h-[44px] touch-manipulation"
-            >
-              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
-              <span className="text-xs sm:text-sm">View Reports</span>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
 
       <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
         {/* Recent Orders */}

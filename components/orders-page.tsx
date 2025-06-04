@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
+import { AddOrderForm } from "./forms/add-order-form";
 
 interface OrderItem {
   id: string;
@@ -76,10 +77,8 @@ export function OrdersPage() {
           </h1>
           <p className="text-neutral-600">Manage and track restaurant orders</p>
         </div>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          New Order
-        </Button>
+
+        <AddOrderForm />
       </div>
 
       {/* Order Stats */}
@@ -145,13 +144,14 @@ export function OrdersPage() {
       </div>
 
       <Tabs defaultValue="all" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="all">All Orders</TabsTrigger>
-          <TabsTrigger value="preparing">Preparing</TabsTrigger>
-          <TabsTrigger value="ready">Ready</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-        </TabsList>
-
+        {currentOrders.length > 0 && (
+          <TabsList>
+            <TabsTrigger value="all">All Orders</TabsTrigger>
+            <TabsTrigger value="preparing">Preparing</TabsTrigger>
+            <TabsTrigger value="ready">Ready</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
+          </TabsList>
+        )}
         <TabsContent value="all">
           <Card className="border-neutral-200 bg-white">
             <CardHeader>
@@ -161,70 +161,83 @@ export function OrdersPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {currentOrders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-lime-100 rounded-lg flex items-center justify-center">
-                        <ShoppingCart className="w-6 h-6 text-lime-600" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <h3 className="font-medium text-neutral-900">
-                            {order.id}
-                          </h3>
-                          <span className="text-sm text-neutral-600">•</span>
-                          <span className="text-sm text-neutral-600">
-                            {order.table}
-                          </span>
-                          <span className="text-sm text-neutral-600">•</span>
-                          <span className="text-sm text-neutral-600">
-                            Server: {order.server}
-                          </span>
+              {currentOrders.length === 0 ? (
+                <div className="text-center py-12">
+                  <ShoppingCart className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                    No orders yet
+                  </h3>
+                  <p className="text-neutral-600 mb-4">
+                    Start by adding your first order or enable demo mode to see
+                    sample data.
+                  </p>
+                  <AddOrderForm />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {currentOrders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-lime-100 rounded-lg flex items-center justify-center">
+                          <ShoppingCart className="w-6 h-6 text-lime-600" />
                         </div>
-                        <div className="mt-1">
-                          {order.items.map((item, index) => (
-                            <span
-                              key={index}
-                              className="text-sm text-neutral-600"
-                            >
-                              {item}
-                              {index < order.items.length - 1 ? ", " : ""}
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2">
+                            <h3 className="font-medium text-neutral-900">
+                              {order.id}
+                            </h3>
+                            <span className="text-sm text-neutral-600">•</span>
+                            <span className="text-sm text-neutral-600">
+                              {order.table}
                             </span>
-                          ))}
-                        </div>
-                        <div className="flex items-center space-x-4 mt-2">
-                          <span className="font-medium text-neutral-900">
-                            ${order.total}
-                          </span>
-                          <span className="text-xs text-neutral-500">
-                            {order.time}
-                          </span>
+                            <span className="text-sm text-neutral-600">•</span>
+                            <span className="text-sm text-neutral-600">
+                              Server: {order.server}
+                            </span>
+                          </div>
+                          <div className="mt-1">
+                            {order.items.map((item, index) => (
+                              <span
+                                key={index}
+                                className="text-sm text-neutral-600"
+                              >
+                                {item}
+                                {index < order.items.length - 1 ? ", " : ""}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex items-center space-x-4 mt-2">
+                            <span className="font-medium text-neutral-900">
+                              ${order.total}
+                            </span>
+                            <span className="text-xs text-neutral-500">
+                              {order.time}
+                            </span>
+                          </div>
                         </div>
                       </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge className={getStatusColor(order.status)}>
+                          {getStatusIcon(order.status)}
+                          {order.status}
+                        </Badge>
+                        {order.status === "preparing" && (
+                          <Button size="sm">Mark Ready</Button>
+                        )}
+                        {order.status === "ready" && (
+                          <Button size="sm">Mark Completed</Button>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge className={getStatusColor(order.status)}>
-                        {getStatusIcon(order.status)}
-                        {order.status}
-                      </Badge>
-                      {order.status === "preparing" && (
-                        <Button size="sm">Mark Ready</Button>
-                      )}
-                      {order.status === "ready" && (
-                        <Button size="sm">Mark Completed</Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
-
         {["preparing", "ready", "completed"].map((status) => (
           <TabsContent key={status} value={status}>
             <Card className="border-neutral-200 bg-white">
