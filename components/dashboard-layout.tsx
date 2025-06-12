@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React from "react";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,6 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useNavbarContext } from "@/contexts/navbar-context";
 import { DemoToggle } from "@/components/demo-toggle";
-import Image from "next/image";
 import { WedgeLogo } from "@/components/wedge-logo";
 
 const allNavigation = [
@@ -90,6 +89,7 @@ const allNavigation = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const staffNavigation = (settings: any) =>
   allNavigation.filter(
     (item) =>
@@ -100,6 +100,7 @@ const staffNavigation = (settings: any) =>
   );
 
 const roleNavigation = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   admin: (settings: any) =>
     allNavigation.filter(
       (item) => item.key === "dashboard" || settings[item.key],
@@ -114,7 +115,9 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export const DashboardLayout = React.memo(function DashboardLayout({
+  children,
+}: DashboardLayoutProps) {
   const [userRole] = useState<keyof typeof roleNavigation>("admin");
   const router = useRouter();
   const pathname = usePathname();
@@ -276,4 +279,4 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
     </div>
   );
-}
+});

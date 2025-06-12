@@ -1,16 +1,113 @@
 "use client";
 
+import React from "react";
+
 // Pre-load the logo image statically to prevent flicker during navigation
-// This ensures the image is cached before any component rendering
 const logoImageUrl = "/logo.png";
-if (typeof window !== "undefined") {
-  const preloadLink = document.createElement("link");
+
+// Create a stable image element to prevent reloading
+if (typeof globalThis !== "undefined" && typeof document !== "undefined") {
+  const doc = globalThis.document;
+  // Preload via link tag
+  const preloadLink = doc.createElement("link");
   preloadLink.rel = "preload";
   preloadLink.as = "image";
   preloadLink.href = logoImageUrl;
-  document.head.appendChild(preloadLink);
+  doc.head.appendChild(preloadLink);
 }
 
+// Create a singleton logo element that never changes
+let logoElement: HTMLDivElement | null = null;
+
+const createStableLogo = (
+  width: number,
+  height: number,
+  pos: boolean,
+  className: string,
+) => {
+  if (
+    typeof globalThis === "undefined" ||
+    typeof globalThis.document === "undefined"
+  )
+    return null;
+
+  const doc = globalThis.document;
+  const container = doc.createElement("div");
+  container.className = `flex items-center ${className}`;
+  container.style.cssText = `
+    height: ${height}px;
+    min-height: ${height}px;
+    width: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    contain: layout style;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  `;
+
+  container.innerHTML = `
+    <img
+      src="${logoImageUrl}"
+      alt="${pos ? "Wedge POS" : "Wedge"}"
+      width="${width}"
+      height="${height}"
+      style="
+        width: ${width}px;
+        height: ${height}px;
+        margin-right: 8px;
+        object-fit: contain;
+        display: block;
+        flex-shrink: 0;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        image-rendering: crisp-edges;
+      "
+    />
+    <h1 style="
+      font-family: inherit;
+      font-weight: bold;
+      color: #65a30d;
+      font-size: 20px;
+      line-height: 20px;
+      margin: 0;
+      padding: 0;
+      white-space: nowrap;
+      display: block;
+      flex-shrink: 0;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    ">
+      Wedge
+    </h1>
+    ${
+      pos
+        ? `
+    <span style="
+      font-family: inherit;
+      font-weight: 500;
+      color: #737373;
+      font-size: 14px;
+      line-height: 14px;
+      margin: 0 0 0 8px;
+      padding: 0;
+      white-space: nowrap;
+      display: block;
+      flex-shrink: 0;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    ">
+      POS
+    </span>
+    `
+        : ""
+    }
+  `;
+
+  return container;
+};
+
+// This component NEVER re-renders after the first render
 export function WedgeLogo({
   className = "",
   pos = false,
@@ -22,43 +119,17 @@ export function WedgeLogo({
   width?: number;
   height?: number;
 }) {
-  // Fixed sizes for consistent rendering
-  const logoWidth = width || 32;
-  const logoHeight = height || 32;
-  const mainFontSize = logoWidth * 0.7;
-  const posFontSize = logoWidth * 0.3;
+  // Create the element only once
+  if (!logoElement) {
+    logoElement = createStableLogo(width, height, pos, className);
+  }
 
-  return (
-    <div
-      className={`flex items-center justify-center ${className}`}
-      style={{ height: logoHeight }}
-    >
-      <div className="flex items-center justify-center h-full">
-        {/* Using a regular img tag with fixed dimensions for consistent rendering */}
-        <img
-          src={logoImageUrl}
-          alt={pos ? "Wedge POS" : "Wedge"}
-          width={logoWidth}
-          height={logoHeight}
-          className="mr-2 object-contain"
-          loading="eager"
-          fetchPriority="high"
-        />
-        <h1
-          className="font-bold text-lime-600"
-          style={{ fontSize: mainFontSize, lineHeight: 1 }}
-        >
-          Wedge
-        </h1>
-        {pos && (
-          <span
-            className="ml-2 text-neutral-500 font-medium"
-            style={{ fontSize: posFontSize, lineHeight: 1 }}
-          >
-            POS
-          </span>
-        )}
-      </div>
-    </div>
-  );
+  return React.createElement("div", {
+    ref: (node: HTMLDivElement | null) => {
+      if (node && logoElement && node !== logoElement) {
+        // Replace the placeholder with our stable logo
+        node.appendChild(logoElement);
+      }
+    },
+  });
 }
