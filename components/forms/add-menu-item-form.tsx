@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import type React from 'react'
+import type React from "react";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -22,38 +22,38 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Switch } from '@/components/ui/switch'
-import { useRestaurantContext } from '@/contexts/restaurant-context'
-import { Plus } from 'lucide-react'
+} from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { useRestaurantContext } from "@/contexts/restaurant-context";
+import { Plus } from "lucide-react";
 
 export function AddMenuItemForm() {
-  const { addMenuItem } = useRestaurantContext()
-  const [open, setOpen] = useState(false)
+  const { addMenuItem } = useRestaurantContext();
+  const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    category: '',
-    price: '',
-    description: '',
+    name: "",
+    category: "",
+    price: "",
+    description: "",
     available: true,
-  })
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     addMenuItem({
       ...formData,
       price: Number.parseFloat(formData.price),
       popularity: 0,
-    })
+    });
     setFormData({
-      name: '',
-      category: '',
-      price: '',
-      description: '',
+      name: "",
+      category: "",
+      price: "",
+      description: "",
       available: true,
-    })
-    setOpen(false)
-  }
+    });
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -66,7 +66,9 @@ export function AddMenuItemForm() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add New Menu Item</DialogTitle>
-          <DialogDescription>Add a new item to your restaurant menu.</DialogDescription>
+          <DialogDescription>
+            Add a new item to your restaurant menu.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
@@ -77,7 +79,9 @@ export function AddMenuItemForm() {
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -88,7 +92,9 @@ export function AddMenuItemForm() {
               </Label>
               <Select
                 value={formData.category}
-                onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, category: value }))
+                }
               >
                 <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Select category" />
@@ -112,7 +118,9 @@ export function AddMenuItemForm() {
                 step="0.01"
                 min="0"
                 value={formData.price}
-                onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, price: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -124,7 +132,12 @@ export function AddMenuItemForm() {
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 className="col-span-3"
                 placeholder="Describe the dish..."
                 required
@@ -153,5 +166,5 @@ export function AddMenuItemForm() {
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

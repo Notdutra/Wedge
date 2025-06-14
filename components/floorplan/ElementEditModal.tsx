@@ -1,4 +1,4 @@
-import React from "react";
+import { type MouseEvent } from "react";
 import {
   TableElement,
   ZoneElement,
@@ -14,13 +14,13 @@ interface ElementEditModalProps {
   onClose: () => void;
 }
 
-export const ElementEditModal: React.FC<ElementEditModalProps> = ({
+export const ElementEditModal = ({
   open,
   element,
   onChange,
   onRemove,
   onClose,
-}) => {
+}: ElementEditModalProps) => {
   if (!open || !element) return null;
 
   // Type guards
@@ -30,7 +30,7 @@ export const ElementEditModal: React.FC<ElementEditModalProps> = ({
     el.type === "barrier";
 
   // Handle click outside to close
-  const handleBackdropClick = (e: React.MouseEvent) => {
+  const handleBackdropClick = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }

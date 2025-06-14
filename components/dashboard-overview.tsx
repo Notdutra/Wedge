@@ -11,10 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
-  DollarSign,
-  Users,
   ShoppingCart,
-  TrendingUp,
   Clock,
   CheckCircle,
   AlertCircle,
@@ -24,8 +21,14 @@ import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
 import { AddOrderForm } from "./forms/add-order-form";
 import { AddReservationForm } from "@/components/forms/add-reservation-form";
-import { AddMenuItemForm } from "@/components/forms/add-menu-item-form";
-import { AddStaffForm } from "@/components/forms/add-staff-form";
+import {
+  demoDashboardStats,
+  demoKitchenPerformance,
+  demoStaffStatus,
+  getEmptyDashboardStats,
+  getEmptyKitchenPerformance,
+  getEmptyStaffStatus,
+} from "@/demo/dashboard-data";
 
 export function DashboardOverview() {
   const { isDemoMode, demoData } = useDemoContext();
@@ -36,36 +39,9 @@ export function DashboardOverview() {
   const currentReservations = useMixedData(demoData.reservations, reservations);
   const currentStaff = useMixedData(demoData.staff, staff);
 
-  const stats = [
-    {
-      title: "Today's Revenue",
-      value: isDemoMode ? "$2,847.50" : "$0.00",
-      change: isDemoMode ? "+12.5%" : "0%",
-      icon: DollarSign,
-      trend: "up",
-    },
-    {
-      title: "Active Orders",
-      value: currentOrders.length.toString(),
-      change: isDemoMode ? "+3" : "0",
-      icon: ShoppingCart,
-      trend: "up",
-    },
-    {
-      title: "Customers Served",
-      value: isDemoMode ? "156" : "0",
-      change: isDemoMode ? "+8.2%" : "0%",
-      icon: Users,
-      trend: "up",
-    },
-    {
-      title: "Table Turnover",
-      value: isDemoMode ? "2.4x" : "0x",
-      change: isDemoMode ? "+0.3" : "0",
-      icon: TrendingUp,
-      trend: "up",
-    },
-  ];
+  const stats = isDemoMode ? demoDashboardStats : getEmptyDashboardStats();
+  // Update active orders count with actual data
+  stats[1].value = currentOrders.length.toString();
 
   const recentOrders = currentOrders.slice(0, 4);
   const todayReservations = currentReservations
@@ -74,21 +50,12 @@ export function DashboardOverview() {
 
   // Kitchen performance data - only show if demo mode is on
   const kitchenPerformance = isDemoMode
-    ? [
-        { name: "Appetizers", time: "8 min avg", progress: 75 },
-        { name: "Main Courses", time: "15 min avg", progress: 60 },
-        { name: "Desserts", time: "5 min avg", progress: 90 },
-      ]
-    : [];
+    ? demoKitchenPerformance
+    : getEmptyKitchenPerformance();
 
   // Staff status - only show if demo mode is on or if there's actual staff
   const staffStatus = isDemoMode
-    ? [
-        { role: "Servers on duty", count: "6 active" },
-        { role: "Kitchen staff", count: "4 active" },
-        { role: "Bartenders", count: "2 active" },
-        { role: "Hosts", count: "1 active" },
-      ]
+    ? demoStaffStatus
     : currentStaff.length > 0
       ? [
           {
@@ -108,7 +75,7 @@ export function DashboardOverview() {
             count: `${currentStaff.filter((s) => s.role === "Host" && s.status === "active").length} active`,
           },
         ]
-      : [];
+      : getEmptyStaffStatus();
 
   return (
     <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
@@ -136,16 +103,18 @@ export function DashboardOverview() {
               <div className="text-lg sm:text-2xl font-bold text-neutral-900 leading-tight">
                 {stat.value}
               </div>
-              <p className="text-xs text-neutral-500 mt-1">
-                <span
-                  className={
-                    stat.trend === "up" ? "text-green-600" : "text-red-600"
-                  }
-                >
-                  {stat.change}
-                </span>{" "}
-                from yesterday
-              </p>
+              {stat.change && (
+                <p className="text-xs text-neutral-500 mt-1">
+                  <span
+                    className={
+                      stat.trend === "up" ? "text-green-600" : "text-red-600"
+                    }
+                  >
+                    {stat.change}
+                  </span>{" "}
+                  from yesterday
+                </p>
+              )}
             </CardContent>
           </Card>
         ))}
@@ -169,9 +138,10 @@ export function DashboardOverview() {
                 <h3 className="text-base sm:text-lg font-medium text-neutral-900 mb-2">
                   No orders yet
                 </h3>
-                <p className="text-sm sm:text-base text-neutral-600">
+                <p className="text-sm sm:text-base text-neutral-600 mb-4">
                   Orders will appear here once you start taking them.
                 </p>
+                <AddOrderForm />
               </div>
             ) : (
               <>
@@ -246,9 +216,10 @@ export function DashboardOverview() {
                 <h3 className="text-base sm:text-lg font-medium text-neutral-900 mb-2">
                   No reservations
                 </h3>
-                <p className="text-sm sm:text-base text-neutral-600">
+                <p className="text-sm sm:text-base text-neutral-600 mb-4">
                   Today&apos;s reservations will appear here.
                 </p>
+                <AddReservationForm />
               </div>
             ) : (
               <>

@@ -14,15 +14,18 @@ import {
   DollarSign,
   CreditCard,
   CheckCircle,
-  AlertCircle,
-  CircleDollarSign,
-  Wallet,
   Download,
   TrendingUp,
-  Calendar,
 } from "lucide-react";
 import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
+import {
+  demoPaymentMethods,
+  demoPaymentStats,
+  getEmptyPaymentMethods,
+  getEmptyPaymentStats,
+  getPaymentStatusColor,
+} from "@/demo/payments-data";
 
 export function PaymentsPage() {
   const { isDemoMode, demoData } = useDemoContext();
@@ -32,82 +35,9 @@ export function PaymentsPage() {
   const currentPayments = useMixedData(demoData.payments, payments);
 
   const paymentMethods = isDemoMode
-    ? [
-        {
-          name: "Credit Cards",
-          amount: 1847.5,
-          percentage: 65,
-          transactions: 45,
-        },
-        { name: "Cash", amount: 623.25, percentage: 22, transactions: 18 },
-        {
-          name: "Mobile Pay",
-          amount: 376.75,
-          percentage: 13,
-          transactions: 12,
-        },
-      ]
-    : [
-        { name: "Credit Cards", amount: 0, percentage: 0, transactions: 0 },
-        { name: "Cash", amount: 0, percentage: 0, transactions: 0 },
-        { name: "Mobile Pay", amount: 0, percentage: 0, transactions: 0 },
-      ];
-
-  const transactions = [
-    {
-      id: "TXN001",
-      amount: 45.67,
-      method: "Credit Card",
-      status: "completed",
-      time: "2:30 PM",
-      table: "Table 5",
-    },
-    {
-      id: "TXN002",
-      amount: 23.45,
-      method: "Cash",
-      status: "completed",
-      time: "2:15 PM",
-      table: "Table 3",
-    },
-    {
-      id: "TXN003",
-      amount: 67.89,
-      method: "Mobile Pay",
-      status: "completed",
-      time: "1:45 PM",
-      table: "Table 8",
-    },
-    {
-      id: "TXN004",
-      amount: 34.56,
-      method: "Credit Card",
-      status: "pending",
-      time: "1:30 PM",
-      table: "Table 12",
-    },
-    {
-      id: "TXN005",
-      amount: 89.12,
-      method: "Credit Card",
-      status: "completed",
-      time: "1:15 PM",
-      table: "Table 2",
-    },
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "failed":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-neutral-100 text-neutral-800 border-neutral-200";
-    }
-  };
+    ? demoPaymentMethods
+    : getEmptyPaymentMethods();
+  const stats = isDemoMode ? demoPaymentStats : getEmptyPaymentStats();
 
   return (
     <div className="p-6 space-y-6">
@@ -136,8 +66,12 @@ export function PaymentsPage() {
             <DollarSign className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-neutral-900">$2,847.50</div>
-            <p className="text-xs text-green-600">+12.5% from yesterday</p>
+            <div className="text-2xl font-bold text-neutral-900">
+              {stats.revenue}
+            </div>
+            {stats.revenueChange && (
+              <p className="text-xs text-green-600">{stats.revenueChange}</p>
+            )}
           </CardContent>
         </Card>
         <Card className="border-neutral-200 bg-white">
@@ -148,8 +82,14 @@ export function PaymentsPage() {
             <CreditCard className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-neutral-900">75</div>
-            <p className="text-xs text-green-600">+8 from yesterday</p>
+            <div className="text-2xl font-bold text-neutral-900">
+              {stats.transactions}
+            </div>
+            {stats.transactionsChange && (
+              <p className="text-xs text-green-600">
+                {stats.transactionsChange}
+              </p>
+            )}
           </CardContent>
         </Card>
         <Card className="border-neutral-200 bg-white">
@@ -160,20 +100,32 @@ export function PaymentsPage() {
             <TrendingUp className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-neutral-900">$37.97</div>
-            <p className="text-xs text-green-600">+2.1% from yesterday</p>
+            <div className="text-2xl font-bold text-neutral-900">
+              {stats.averageTransaction}
+            </div>
+            {stats.averageTransactionChange && (
+              <p className="text-xs text-green-600">
+                {stats.averageTransactionChange}
+              </p>
+            )}
           </CardContent>
         </Card>
         <Card className="border-neutral-200 bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-neutral-600">
-              Processing Fees
+              Success Rate
             </CardTitle>
-            <Calendar className="h-4 w-4 text-lime-600" />
+            <CheckCircle className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-neutral-900">$85.43</div>
-            <p className="text-xs text-neutral-600">2.9% of revenue</p>
+            <div className="text-2xl font-bold text-neutral-900">
+              {stats.successRate}
+            </div>
+            {stats.successRateChange && (
+              <p className="text-xs text-green-600">
+                {stats.successRateChange}
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -222,7 +174,9 @@ export function PaymentsPage() {
                           {transaction.method}
                         </p>
                       </div>
-                      <Badge className={getStatusColor(transaction.status)}>
+                      <Badge
+                        className={getPaymentStatusColor(transaction.status)}
+                      >
                         {transaction.status}
                       </Badge>
                     </div>

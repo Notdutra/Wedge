@@ -12,18 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Clock,
-  Search,
-  Edit,
-  Trash2,
-  Package,
-  AlertTriangle,
-  Plus,
-  Filter,
-} from "lucide-react";
+import { Search, Package, AlertTriangle, Plus, Filter } from "lucide-react";
 import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
+import {
+  demoInventoryStats,
+  getEmptyInventoryStats,
+  getInventoryStatusColor,
+} from "@/demo/inventory-data";
 
 export function InventoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,16 +34,7 @@ export function InventoryPage() {
     (item) => item.status === "low",
   );
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "low":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "good":
-        return "bg-green-100 text-green-800 border-green-200";
-      default:
-        return "bg-neutral-100 text-neutral-800 border-neutral-200";
-    }
-  };
+  const stats = isDemoMode ? demoInventoryStats : getEmptyInventoryStats();
 
   return (
     <div className="p-6 space-y-6">
@@ -102,7 +89,9 @@ export function InventoryPage() {
             <Filter className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-neutral-900">4</div>
+            <div className="text-2xl font-bold text-neutral-900">
+              {stats.categories}
+            </div>
           </CardContent>
         </Card>
         <Card className="border-neutral-200 bg-white">
@@ -113,7 +102,9 @@ export function InventoryPage() {
             <Package className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-neutral-900">$2,847</div>
+            <div className="text-2xl font-bold text-neutral-900">
+              {stats.totalValue}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -175,7 +166,7 @@ export function InventoryPage() {
                           Min: {item.minimum}
                         </p>
                       </div>
-                      <Badge className={getStatusColor(item.status)}>
+                      <Badge className={getInventoryStatusColor(item.status)}>
                         {item.status === "low" ? "Low Stock" : "In Stock"}
                       </Badge>
                     </div>
@@ -262,7 +253,9 @@ export function InventoryPage() {
                             <span className="text-sm text-neutral-600">
                               {item.current} {item.unit}
                             </span>
-                            <Badge className={getStatusColor(item.status)}>
+                            <Badge
+                              className={getInventoryStatusColor(item.status)}
+                            >
                               {item.status === "low" ? "Low" : "OK"}
                             </Badge>
                           </div>

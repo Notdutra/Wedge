@@ -1,4 +1,4 @@
-import React from "react";
+import { type MouseEvent, type ReactNode, type CSSProperties } from "react";
 import {
   TableElement,
   ZoneElement,
@@ -16,12 +16,12 @@ interface ElementItemProps {
   isDragging: boolean;
   isHovered?: boolean;
   isOutOfBounds?: boolean;
-  onResizeMouseDown?: (e: React.MouseEvent<HTMLSpanElement>) => void;
-  children?: React.ReactNode;
+  onResizeMouseDown?: (e: MouseEvent<HTMLSpanElement>) => void;
+  children?: ReactNode;
   disableTransitions?: boolean;
 }
 
-export const ElementItem: React.FC<ElementItemProps> = ({
+export const ElementItem = ({
   element,
   isSelected,
   isDragging,
@@ -30,9 +30,9 @@ export const ElementItem: React.FC<ElementItemProps> = ({
   onResizeMouseDown,
   children,
   disableTransitions = false,
-}) => {
+}: ElementItemProps) => {
   // Shared style
-  const style: React.CSSProperties = {
+  const style: CSSProperties = {
     left: Math.round(element.x),
     top: Math.round(element.y),
     width: element.width,

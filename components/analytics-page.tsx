@@ -7,21 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -31,55 +16,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  DollarSign,
-  TrendingUp,
-  Users,
-  ShoppingCart,
-  BarChart3,
-  Clock,
-} from "lucide-react";
+import { DollarSign, TrendingUp, Users, BarChart3, Clock } from "lucide-react";
 import { useDemoContext } from "@/contexts/demo-context";
+import {
+  demoWeeklySalesData,
+  demoAnalyticsStats,
+  demoTopMenuItems,
+  demoPeakHours,
+  demoPerformanceMetrics,
+  demoCustomerDemographics,
+  demoRevenueBreakdown,
+  getEmptyWeeklySalesData,
+  getEmptyAnalyticsStats,
+} from "@/demo/analytics-data";
 
 export function AnalyticsPage() {
   const { isDemoMode } = useDemoContext();
 
   const salesData = isDemoMode
-    ? [
-        { day: "Mon", sales: 2400, orders: 45 },
-        { day: "Tue", sales: 2800, orders: 52 },
-        { day: "Wed", sales: 3200, orders: 58 },
-        { day: "Thu", sales: 2900, orders: 48 },
-        { day: "Fri", sales: 4100, orders: 72 },
-        { day: "Sat", sales: 4800, orders: 85 },
-        { day: "Sun", sales: 3600, orders: 63 },
-      ]
-    : [
-        { day: "Mon", sales: 0, orders: 0 },
-        { day: "Tue", sales: 0, orders: 0 },
-        { day: "Wed", sales: 0, orders: 0 },
-        { day: "Thu", sales: 0, orders: 0 },
-        { day: "Fri", sales: 0, orders: 0 },
-        { day: "Sat", sales: 0, orders: 0 },
-        { day: "Sun", sales: 0, orders: 0 },
-      ];
-
-  const topItems = [
-    { name: "Classic Burger", sales: 145, revenue: 2175, percentage: 85 },
-    { name: "Margherita Pizza", sales: 98, revenue: 1470, percentage: 65 },
-    { name: "Caesar Salad", sales: 87, revenue: 1044, percentage: 58 },
-    { name: "Grilled Chicken", sales: 76, revenue: 1520, percentage: 50 },
-    { name: "Fish & Chips", sales: 65, revenue: 1170, percentage: 43 },
-  ];
-
-  const peakHours = [
-    { time: "11:00 AM", orders: 12, percentage: 30 },
-    { time: "12:00 PM", orders: 28, percentage: 70 },
-    { time: "1:00 PM", orders: 35, percentage: 87 },
-    { time: "6:00 PM", orders: 42, percentage: 100 },
-    { time: "7:00 PM", orders: 38, percentage: 90 },
-    { time: "8:00 PM", orders: 31, percentage: 74 },
-  ];
+    ? demoWeeklySalesData
+    : getEmptyWeeklySalesData();
+  const stats = isDemoMode ? demoAnalyticsStats : getEmptyAnalyticsStats();
 
   return (
     <div className="p-6 space-y-6">
@@ -118,10 +75,10 @@ export function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-neutral-900">
-              {isDemoMode ? "$23,847" : "$0"}
+              {stats.totalRevenue}
             </div>
             {isDemoMode && (
-              <p className="text-xs text-green-600">+18.2% from last week</p>
+              <p className="text-xs text-green-600">{stats.revenueChange}</p>
             )}
           </CardContent>
         </Card>
@@ -134,10 +91,10 @@ export function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-neutral-900">
-              {isDemoMode ? "423" : "0"}
+              {stats.totalOrders}
             </div>
             {isDemoMode && (
-              <p className="text-xs text-green-600">+12.5% from last week</p>
+              <p className="text-xs text-green-600">{stats.ordersChange}</p>
             )}
           </CardContent>
         </Card>
@@ -150,10 +107,10 @@ export function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-neutral-900">
-              {isDemoMode ? "$56.38" : "$0.00"}
+              {stats.averageOrder}
             </div>
             {isDemoMode && (
-              <p className="text-xs text-green-600">+4.8% from last week</p>
+              <p className="text-xs text-green-600">{stats.averageChange}</p>
             )}
           </CardContent>
         </Card>
@@ -166,10 +123,10 @@ export function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-neutral-900">
-              {isDemoMode ? "1,247" : "0"}
+              {stats.totalCustomers}
             </div>
             {isDemoMode && (
-              <p className="text-xs text-green-600">+8.1% from last week</p>
+              <p className="text-xs text-green-600">{stats.customersChange}</p>
             )}
           </CardContent>
         </Card>
@@ -222,30 +179,25 @@ export function AnalyticsPage() {
                 <CardDescription>Key performance indicators</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Table turnover rate</span>
-                  <span className="font-medium text-neutral-900">2.4x/day</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Average wait time</span>
-                  <span className="font-medium text-neutral-900">
-                    12 minutes
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Order accuracy</span>
-                  <span className="font-medium text-green-600">97.8%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">
-                    Customer satisfaction
-                  </span>
-                  <span className="font-medium text-green-600">4.6/5</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Food cost percentage</span>
-                  <span className="font-medium text-neutral-900">28.5%</span>
-                </div>
+                {isDemoMode ? (
+                  demoPerformanceMetrics.map((metric) => (
+                    <div
+                      key={metric.label}
+                      className="flex justify-between items-center"
+                    >
+                      <span className="text-neutral-700">{metric.label}</span>
+                      <span
+                        className={`font-medium ${metric.isPositive ? "text-green-600" : "text-neutral-900"}`}
+                      >
+                        {metric.value}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-neutral-500 py-8">
+                    No performance data available yet
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -263,36 +215,42 @@ export function AnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {topItems.map((item, index) => (
-                  <div
-                    key={item.name}
-                    className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 bg-lime-100 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-lime-600">
-                          #{index + 1}
+                {isDemoMode ? (
+                  demoTopMenuItems.map((item, index) => (
+                    <div
+                      key={item.name}
+                      className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="w-8 h-8 bg-lime-100 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium text-lime-600">
+                            #{index + 1}
+                          </span>
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-neutral-900">
+                            {item.name}
+                          </h3>
+                          <p className="text-sm text-neutral-600">
+                            {item.sales} sold • ${item.revenue} revenue
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <div className="w-24">
+                          <Progress value={item.percentage} className="h-2" />
+                        </div>
+                        <span className="text-sm text-neutral-600 w-12">
+                          {item.percentage}%
                         </span>
                       </div>
-                      <div>
-                        <h3 className="font-medium text-neutral-900">
-                          {item.name}
-                        </h3>
-                        <p className="text-sm text-neutral-600">
-                          {item.sales} sold • ${item.revenue} revenue
-                        </p>
-                      </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-24">
-                        <Progress value={item.percentage} className="h-2" />
-                      </div>
-                      <span className="text-sm text-neutral-600 w-12">
-                        {item.percentage}%
-                      </span>
-                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-neutral-500 py-8">
+                    No menu performance data available yet
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>
@@ -309,29 +267,37 @@ export function AnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {peakHours.map((hour) => (
-                  <div
-                    key={hour.time}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <span className="w-20 text-neutral-700">{hour.time}</span>
-                      <div className="flex-1 w-48">
-                        <div className="w-full bg-neutral-200 rounded-full h-3">
-                          <div
-                            className="bg-lime-600 h-3 rounded-full"
-                            style={{ width: `${hour.percentage}%` }}
-                          ></div>
+                {isDemoMode ? (
+                  demoPeakHours.map((hour) => (
+                    <div
+                      key={hour.time}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="w-20 text-neutral-700">
+                          {hour.time}
+                        </span>
+                        <div className="flex-1 w-48">
+                          <div className="w-full bg-neutral-200 rounded-full h-3">
+                            <div
+                              className="bg-lime-600 h-3 rounded-full"
+                              style={{ width: `${hour.percentage}%` }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
+                      <div className="text-right">
+                        <p className="font-medium text-neutral-900">
+                          {hour.orders} orders
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-medium text-neutral-900">
-                        {hour.orders} orders
-                      </p>
-                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-neutral-500 py-8">
+                    No peak hours data available yet
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>
@@ -349,26 +315,25 @@ export function AnalyticsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">New customers</span>
-                  <span className="font-medium text-neutral-900">23%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Returning customers</span>
-                  <span className="font-medium text-neutral-900">77%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Average party size</span>
-                  <span className="font-medium text-neutral-900">
-                    2.8 people
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Dine-in vs Takeout</span>
-                  <span className="font-medium text-neutral-900">
-                    68% / 32%
-                  </span>
-                </div>
+                {isDemoMode ? (
+                  demoCustomerDemographics.map((demographic) => (
+                    <div
+                      key={demographic.label}
+                      className="flex justify-between items-center"
+                    >
+                      <span className="text-neutral-700">
+                        {demographic.label}
+                      </span>
+                      <span className="font-medium text-neutral-900">
+                        {demographic.value}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-neutral-500 py-8">
+                    No customer data available yet
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -380,32 +345,37 @@ export function AnalyticsPage() {
                 <CardDescription>Revenue sources this week</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Food sales</span>
-                  <span className="font-medium text-neutral-900">
-                    $18,278 (77%)
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Beverage sales</span>
-                  <span className="font-medium text-neutral-900">
-                    $4,569 (19%)
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-neutral-700">Dessert sales</span>
-                  <span className="font-medium text-neutral-900">
-                    $1,000 (4%)
-                  </span>
-                </div>
-                <div className="pt-2 border-t border-neutral-200">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-neutral-900">
-                      Total Revenue
-                    </span>
-                    <span className="font-bold text-neutral-900">$23,847</span>
+                {isDemoMode ? (
+                  <>
+                    {demoRevenueBreakdown.map((revenue) => (
+                      <div
+                        key={revenue.category}
+                        className="flex justify-between items-center"
+                      >
+                        <span className="text-neutral-700">
+                          {revenue.category}
+                        </span>
+                        <span className="font-medium text-neutral-900">
+                          {revenue.amount} {revenue.percentage}
+                        </span>
+                      </div>
+                    ))}
+                    <div className="pt-2 border-t border-neutral-200">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-neutral-900">
+                          Total Revenue
+                        </span>
+                        <span className="font-bold text-neutral-900">
+                          {stats.totalRevenue}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center text-neutral-500 py-8">
+                    No revenue breakdown available yet
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </div>
