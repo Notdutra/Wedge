@@ -14,22 +14,17 @@ import {
   DollarSign,
   CreditCard,
   CheckCircle,
-  AlertCircle,
-  CircleDollarSign,
-  Wallet,
   Download,
   TrendingUp,
-  Calendar,
 } from "lucide-react";
 import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
 import {
   demoPaymentMethods,
-  demoPaymentTransactions,
   demoPaymentStats,
   getEmptyPaymentMethods,
   getEmptyPaymentStats,
-  getStatusColor,
+  getPaymentStatusColor,
 } from "@/demo/payments-data";
 
 export function PaymentsPage() {
@@ -42,7 +37,6 @@ export function PaymentsPage() {
   const paymentMethods = isDemoMode
     ? demoPaymentMethods
     : getEmptyPaymentMethods();
-  const transactions = isDemoMode ? demoPaymentTransactions : [];
   const stats = isDemoMode ? demoPaymentStats : getEmptyPaymentStats();
 
   return (
@@ -180,7 +174,9 @@ export function PaymentsPage() {
                           {transaction.method}
                         </p>
                       </div>
-                      <Badge className={getStatusColor(transaction.status)}>
+                      <Badge
+                        className={getPaymentStatusColor(transaction.status)}
+                      >
                         {transaction.status}
                       </Badge>
                     </div>

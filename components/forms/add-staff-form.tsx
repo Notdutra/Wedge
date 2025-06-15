@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
-import type React from 'react'
+import type React from "react";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -21,39 +21,39 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { useRestaurantContext } from '@/contexts/restaurant-context'
-import { Plus } from 'lucide-react'
+} from "@/components/ui/dialog";
+import { useRestaurantContext } from "@/contexts/restaurant-context";
+import { Plus } from "lucide-react";
 
 export function AddStaffForm() {
-  const { addStaff } = useRestaurantContext()
-  const [open, setOpen] = useState(false)
+  const { addStaff } = useRestaurantContext();
+  const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    role: '',
-    email: '',
-    phone: '',
-    shift: 'Morning',
-    status: 'off',
+    name: "",
+    role: "",
+    email: "",
+    phone: "",
+    shift: "Morning",
+    status: "off",
     hours: 0,
-    startDate: new Date().toISOString().split('T')[0],
-  })
+    startDate: new Date().toISOString().split("T")[0],
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    addStaff(formData)
+    e.preventDefault();
+    addStaff(formData);
     setFormData({
-      name: '',
-      role: '',
-      email: '',
-      phone: '',
-      shift: 'Morning',
-      status: 'off',
+      name: "",
+      role: "",
+      email: "",
+      phone: "",
+      shift: "Morning",
+      status: "off",
       hours: 0,
-      startDate: new Date().toISOString().split('T')[0],
-    })
-    setOpen(false)
-  }
+      startDate: new Date().toISOString().split("T")[0],
+    });
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -66,7 +66,9 @@ export function AddStaffForm() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add New Staff Member</DialogTitle>
-          <DialogDescription>Add a new team member to your restaurant.</DialogDescription>
+          <DialogDescription>
+            Add a new team member to your restaurant.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
@@ -77,7 +79,9 @@ export function AddStaffForm() {
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -88,7 +92,9 @@ export function AddStaffForm() {
               </Label>
               <Select
                 value={formData.role}
-                onValueChange={(value) => setFormData((prev) => ({ ...prev, role: value }))}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, role: value }))
+                }
               >
                 <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Select role" />
@@ -110,7 +116,9 @@ export function AddStaffForm() {
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, email: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -123,7 +131,9 @@ export function AddStaffForm() {
                 id="phone"
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, phone: e.target.value }))
+                }
                 className="col-span-3"
                 required
               />
@@ -134,7 +144,9 @@ export function AddStaffForm() {
               </Label>
               <Select
                 value={formData.shift}
-                onValueChange={(value) => setFormData((prev) => ({ ...prev, shift: value }))}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, shift: value }))
+                }
               >
                 <SelectTrigger className="col-span-3">
                   <SelectValue />
@@ -154,7 +166,12 @@ export function AddStaffForm() {
                 id="startDate"
                 type="date"
                 value={formData.startDate}
-                onChange={(e) => setFormData((prev) => ({ ...prev, startDate: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    startDate: e.target.value,
+                  }))
+                }
                 className="col-span-3"
                 required
               />
@@ -168,5 +185,5 @@ export function AddStaffForm() {
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

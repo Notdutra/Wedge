@@ -1,4 +1,16 @@
 // Staff Demo Data
+export interface StaffMember {
+  id: number;
+  name: string;
+  role: string;
+  status: "active" | "break" | "off";
+  shift: string;
+  hours: number;
+  email: string;
+  phone: string;
+  startDate: string;
+}
+
 export interface StaffShift {
   name: string;
   time: string;
@@ -12,6 +24,53 @@ export interface StaffStats {
   onBreak: number;
   offDuty: number;
 }
+
+export const demoStaff: StaffMember[] = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    role: "Server",
+    status: "active",
+    shift: "Morning",
+    hours: 8.5,
+    email: "sarah@restaurant.com",
+    phone: "(555) 123-4567",
+    startDate: "2023-01-15",
+  },
+  {
+    id: 2,
+    name: "Mike Chen",
+    role: "Chef",
+    status: "active",
+    shift: "Evening",
+    hours: 9.0,
+    email: "mike@restaurant.com",
+    phone: "(555) 234-5678",
+    startDate: "2022-08-20",
+  },
+  {
+    id: 3,
+    name: "Lisa Wong",
+    role: "Bartender",
+    status: "break",
+    shift: "Evening",
+    hours: 7.5,
+    email: "lisa@restaurant.com",
+    phone: "(555) 345-6789",
+    startDate: "2023-03-10",
+  },
+  {
+    id: 4,
+    name: "David Brown",
+    role: "Host",
+    status: "active",
+    shift: "Afternoon",
+    hours: 6.0,
+    email: "david@restaurant.com",
+    phone: "(555) 456-7890",
+    startDate: "2023-05-22",
+  },
+];
 
 export const demoStaffShifts: StaffShift[] = [
   {
@@ -55,7 +114,7 @@ export const getEmptyStaffShifts = (): StaffShift[] => [
   },
 ];
 
-export const getStatusColor = (status: string): string => {
+export const getStaffStatusColor = (status: string): string => {
   switch (status) {
     case "active":
       return "bg-green-100 text-green-800 border-green-200";

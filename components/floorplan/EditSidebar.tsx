@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { WedgeLogo } from "@/components/wedge-logo";
@@ -15,12 +14,12 @@ interface EditSidebarProps {
   onCloseEdit: () => void;
 }
 
-export const EditSidebar: React.FC<EditSidebarProps> = ({
+export const EditSidebar = ({
   editElement,
   onEditChange,
   onEditRemove,
   onCloseEdit,
-}) => {
+}: EditSidebarProps) => {
   const isActive = !!editElement;
   const containerClass = isActive ? "" : "opacity-50";
   const inputClass = `w-full border rounded px-2 py-1 ${isActive ? "" : "bg-gray-50 text-gray-400"}`;

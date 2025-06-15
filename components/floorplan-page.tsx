@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Grid3X3, Users, Clock, CheckCircle, Edit, Plus } from "lucide-react";
 import { useDemoContext } from "@/contexts/demo-context";
-import React from "react";
 import { useRouter } from "next/navigation";
 import { useFloorplan, FloorplanProvider } from "@/contexts/floorplan-context";
 import { RestaurantCanvas } from "@/components/restaurant-canvas";

@@ -12,12 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Users,
   Search,
-  Edit,
-  Trash2,
   Calendar,
   Clock,
   CheckCircle as UserCheck,
@@ -28,7 +26,7 @@ import { AddStaffForm } from "@/components/forms/add-staff-form";
 import {
   demoStaffShifts,
   getEmptyStaffShifts,
-  getStatusColor,
+  getStaffStatusColor,
   getRoleColor,
 } from "@/demo/staff-data";
 
@@ -180,7 +178,7 @@ export function StaffPage() {
                             {member.hours}h today
                           </p>
                         </div>
-                        <Badge className={getStatusColor(member.status)}>
+                        <Badge className={getStaffStatusColor(member.status)}>
                           {member.status === "active"
                             ? "Active"
                             : member.status === "break"

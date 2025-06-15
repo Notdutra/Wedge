@@ -90,6 +90,9 @@ export const demoPaymentTransactions: PaymentTransaction[] = [
   },
 ];
 
+// Alias for compatibility with demo context
+export const demoPayments = demoPaymentTransactions;
+
 export const demoPaymentStats: PaymentStats = {
   revenue: "$2,847.50",
   revenueChange: "+12.5% from yesterday",
@@ -118,7 +121,7 @@ export const getEmptyPaymentStats = (): PaymentStats => ({
   averageTransactionChange: "",
 });
 
-export const getStatusColor = (status: string): string => {
+export const getPaymentStatusColor = (status: string): string => {
   switch (status) {
     case "completed":
       return "bg-green-100 text-green-800 border-green-200";

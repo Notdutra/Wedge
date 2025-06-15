@@ -1,8 +1,6 @@
 "use client";
 
-import React from "react";
-
-import { useState } from "react";
+import React, { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -112,7 +110,7 @@ const roleNavigation = {
 };
 
 interface DashboardLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const DashboardLayout = React.memo(function DashboardLayout({

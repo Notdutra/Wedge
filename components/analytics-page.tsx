@@ -7,21 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -31,14 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  DollarSign,
-  TrendingUp,
-  Users,
-  ShoppingCart,
-  BarChart3,
-  Clock,
-} from "lucide-react";
+import { DollarSign, TrendingUp, Users, BarChart3, Clock } from "lucide-react";
 import { useDemoContext } from "@/contexts/demo-context";
 import {
   demoWeeklySalesData,

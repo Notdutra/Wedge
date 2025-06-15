@@ -1,4 +1,3 @@
-import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { DemoTable, getTableStatusBadgeColor } from "../floorplan-data";
 import { TableElement } from "@/types/element-types";

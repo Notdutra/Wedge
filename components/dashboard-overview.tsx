@@ -11,10 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
-  DollarSign,
-  Users,
   ShoppingCart,
-  TrendingUp,
   Clock,
   CheckCircle,
   AlertCircle,
@@ -24,8 +21,6 @@ import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
 import { AddOrderForm } from "./forms/add-order-form";
 import { AddReservationForm } from "@/components/forms/add-reservation-form";
-import { AddMenuItemForm } from "@/components/forms/add-menu-item-form";
-import { AddStaffForm } from "@/components/forms/add-staff-form";
 import {
   demoDashboardStats,
   demoKitchenPerformance,

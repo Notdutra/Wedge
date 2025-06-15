@@ -70,6 +70,9 @@ export const demoInventoryItems: InventoryItem[] = [
   },
 ];
 
+// Alias for compatibility with demo context
+export const demoInventory = demoInventoryItems;
+
 export const demoInventoryStats: InventoryStats = {
   totalItems: 128,
   lowStock: 14,
@@ -84,7 +87,7 @@ export const getEmptyInventoryStats = (): InventoryStats => ({
   totalValue: "$0",
 });
 
-export const getStatusColor = (status: string): string => {
+export const getInventoryStatusColor = (status: string): string => {
   switch (status) {
     case "low":
       return "bg-red-100 text-red-800 border-red-200";

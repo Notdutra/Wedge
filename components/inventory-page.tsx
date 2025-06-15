@@ -12,23 +12,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Clock,
-  Search,
-  Edit,
-  Trash2,
-  Package,
-  AlertTriangle,
-  Plus,
-  Filter,
-} from "lucide-react";
+import { Search, Package, AlertTriangle, Plus, Filter } from "lucide-react";
 import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
 import {
-  demoInventoryItems,
   demoInventoryStats,
   getEmptyInventoryStats,
-  getStatusColor,
+  getInventoryStatusColor,
 } from "@/demo/inventory-data";
 
 export function InventoryPage() {
@@ -176,7 +166,7 @@ export function InventoryPage() {
                           Min: {item.minimum}
                         </p>
                       </div>
-                      <Badge className={getStatusColor(item.status)}>
+                      <Badge className={getInventoryStatusColor(item.status)}>
                         {item.status === "low" ? "Low Stock" : "In Stock"}
                       </Badge>
                     </div>
@@ -263,7 +253,9 @@ export function InventoryPage() {
                             <span className="text-sm text-neutral-600">
                               {item.current} {item.unit}
                             </span>
-                            <Badge className={getStatusColor(item.status)}>
+                            <Badge
+                              className={getInventoryStatusColor(item.status)}
+                            >
                               {item.status === "low" ? "Low" : "OK"}
                             </Badge>
                           </div>
