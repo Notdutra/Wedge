@@ -42,3 +42,4 @@ yarn.lock
 
 # pnpm store (if local)
 .pnpm-store
+*.tsbuildinfo
