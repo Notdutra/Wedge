@@ -6,15 +6,9 @@ import {
   useState,
   useEffect,
   type ReactNode,
-} from "reainterface RestaurantContextType {
-  // Loading state
-  isLoading: boolean;
-  
-  // Orders
-  orders: Order[];
-  addOrder: (order: Omit<Order, 'id'>) => void;
-  updateOrder: (id: string, updates: Partial<Order>) => void;
-  deleteOrder: (id: string) => void;// TypeScript interfaces for restaurant data
+} from "react";
+
+// TypeScript interfaces for restaurant data
 export interface Order {
   id: string;
   table: string;
@@ -114,6 +108,9 @@ const loadFromStorage = (key: string, defaultValue: unknown = []) => {
 };
 
 interface RestaurantContextType {
+  // Loading state
+  isLoading: boolean;
+
   // Orders
   orders: Order[];
   addOrder: (order: Omit<Order, "id">) => void;
@@ -168,21 +165,25 @@ export function useRestaurantContext() {
 
 export function RestaurantProvider({ children }: { children: ReactNode }) {
   // Initialize state with empty arrays to prevent hydration mismatches
+  const [isLoading, setIsLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [staff, setStaff] = useState<StaffMember[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [payments, setPayments] = useState<PaymentTransaction[]>([]);
-  
+
   // Load data from localStorage after component mounts
   useEffect(() => {
     setOrders(loadFromStorage(STORAGE_KEYS.orders) as Order[]);
-    setReservations(loadFromStorage(STORAGE_KEYS.reservations) as Reservation[]);
+    setReservations(
+      loadFromStorage(STORAGE_KEYS.reservations) as Reservation[],
+    );
     setStaff(loadFromStorage(STORAGE_KEYS.staff) as StaffMember[]);
     setMenuItems(loadFromStorage(STORAGE_KEYS.menuItems) as MenuItem[]);
     setInventory(loadFromStorage(STORAGE_KEYS.inventory) as InventoryItem[]);
     setPayments(loadFromStorage(STORAGE_KEYS.payments) as PaymentTransaction[]);
+    setIsLoading(false);
   }, []);
 
   // Save to localStorage whenever state changes
@@ -212,7 +213,7 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
 
   // Orders
   const addOrder = (order: Omit<Order, "id">) => {
-    setOrders((prev) => [
+    setOrders((prev: Order[]) => [
       ...prev,
       {
         ...order,
@@ -222,83 +223,110 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   };
 
   const updateOrder = (id: string, updates: Partial<Order>) => {
-    setOrders((prev) =>
-      prev.map((order) => (order.id === id ? { ...order, ...updates } : order)),
+    setOrders((prev: Order[]) =>
+      prev.map((order: Order) =>
+        order.id === id ? { ...order, ...updates } : order,
+      ),
     );
   };
 
   const deleteOrder = (id: string) => {
-    setOrders((prev) => prev.filter((order) => order.id !== id));
+    setOrders((prev: Order[]) =>
+      prev.filter((order: Order) => order.id !== id),
+    );
   };
 
   // Reservations
   const addReservation = (reservation: Omit<Reservation, "id">) => {
-    setReservations((prev) => [
+    setReservations((prev: Reservation[]) => [
       ...prev,
       { ...reservation, id: prev.length + 1 },
     ]);
   };
 
   const updateReservation = (id: number, updates: Partial<Reservation>) => {
-    setReservations((prev) =>
-      prev.map((res) => (res.id === id ? { ...res, ...updates } : res)),
+    setReservations((prev: Reservation[]) =>
+      prev.map((res: Reservation) =>
+        res.id === id ? { ...res, ...updates } : res,
+      ),
     );
   };
 
   const deleteReservation = (id: number) => {
-    setReservations((prev) => prev.filter((res) => res.id !== id));
+    setReservations((prev: Reservation[]) =>
+      prev.filter((res: Reservation) => res.id !== id),
+    );
   };
 
   // Staff
   const addStaff = (member: Omit<StaffMember, "id">) => {
-    setStaff((prev) => [...prev, { ...member, id: prev.length + 1 }]);
+    setStaff((prev: StaffMember[]) => [
+      ...prev,
+      { ...member, id: prev.length + 1 },
+    ]);
   };
 
   const updateStaff = (id: number, updates: Partial<StaffMember>) => {
-    setStaff((prev) =>
-      prev.map((member) =>
+    setStaff((prev: StaffMember[]) =>
+      prev.map((member: StaffMember) =>
         member.id === id ? { ...member, ...updates } : member,
       ),
     );
   };
 
   const deleteStaff = (id: number) => {
-    setStaff((prev) => prev.filter((member) => member.id !== id));
+    setStaff((prev: StaffMember[]) =>
+      prev.filter((member: StaffMember) => member.id !== id),
+    );
   };
 
   // Menu Items
   const addMenuItem = (item: Omit<MenuItem, "id">) => {
-    setMenuItems((prev) => [...prev, { ...item, id: prev.length + 1 }]);
+    setMenuItems((prev: MenuItem[]) => [
+      ...prev,
+      { ...item, id: prev.length + 1 },
+    ]);
   };
 
   const updateMenuItem = (id: number, updates: Partial<MenuItem>) => {
-    setMenuItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updates } : item)),
+    setMenuItems((prev: MenuItem[]) =>
+      prev.map((item: MenuItem) =>
+        item.id === id ? { ...item, ...updates } : item,
+      ),
     );
   };
 
   const deleteMenuItem = (id: number) => {
-    setMenuItems((prev) => prev.filter((item) => item.id !== id));
+    setMenuItems((prev: MenuItem[]) =>
+      prev.filter((item: MenuItem) => item.id !== id),
+    );
   };
 
   // Inventory
   const addInventoryItem = (item: Omit<InventoryItem, "id">) => {
-    setInventory((prev) => [...prev, { ...item, id: String(prev.length + 1) }]);
+    setInventory((prev: InventoryItem[]) => [
+      ...prev,
+      { ...item, id: String(prev.length + 1) },
+    ]);
   };
 
   const updateInventoryItem = (id: string, updates: Partial<InventoryItem>) => {
-    setInventory((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updates } : item)),
+    setInventory((prev: InventoryItem[]) =>
+      prev.map((item: InventoryItem) =>
+        item.id === id ? { ...item, ...updates } : item,
+      ),
     );
   };
 
   const deleteInventoryItem = (id: string) => {
-    setInventory((prev) => prev.filter((item) => item.id !== id));
+    setInventory((prev: InventoryItem[]) =>
+      prev.filter((item: InventoryItem) => item.id !== id),
+    );
   };
 
   // Payments
   const addPayment = (payment: Omit<PaymentTransaction, "id">) => {
-    setPayments((prev) => [
+    setPayments((prev: PaymentTransaction[]) => [
       ...prev,
       {
         ...payment,
@@ -326,6 +354,7 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   return (
     <RestaurantContext.Provider
       value={{
+        isLoading,
         orders,
         addOrder,
         updateOrder,

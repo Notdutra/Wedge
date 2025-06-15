@@ -14,7 +14,7 @@ export const HowToCard = React.memo(function HowToCard() {
         <li>
           Click outside the canvas or press <kbd>Esc</kbd> to stop adding.
         </li>
-        <li>Click "Save & Return" when finished.</li>
+        <li>Click &quot;Save &amp; Return&quot; when finished.</li>
       </ol>
     </div>
   );

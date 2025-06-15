@@ -241,7 +241,7 @@ export const EditSidebar = ({
                   />
                 </div>
                 <p className="text-xs text-neutral-500 mt-1">
-                  Choose a color that matches your restaurant's theme
+                  Choose a color that matches your restaurant&apos;s theme
                 </p>
               </div>
 
