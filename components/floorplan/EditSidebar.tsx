@@ -31,7 +31,7 @@ export const EditSidebar = ({
     <div className="flex h-full flex-col bg-white border-r border-neutral-200">
       {/* Logo header - matches dashboard layout exactly */}
       <div className="flex h-14 sm:h-16 shrink-0 items-center px-3 sm:px-4 border-b border-neutral-200">
-        <WedgeLogo />
+        <WedgeLogo pos={true} />
       </div>
 
       {/* Properties Panel */}

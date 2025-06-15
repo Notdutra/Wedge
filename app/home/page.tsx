@@ -9,7 +9,7 @@ export default function HomePage() {
       <header className="w-full py-6 px-4 sm:px-6 lg:px-8 h-[72px]">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/home" className="flex items-center gap-2 group">
-            <WedgeLogo width={32} height={32} />
+            <WedgeLogo width={32} height={32} pos={true} />
           </Link>
           <nav className="flex items-center gap-3">
             <Link href="/signin">

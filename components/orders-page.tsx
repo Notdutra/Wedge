@@ -10,13 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  ShoppingCart,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Plus,
-} from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ShoppingCart, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { useDemoContext, useMixedData } from "@/contexts/demo-context";
 import { useRestaurantContext } from "@/contexts/restaurant-context";
 import { AddOrderForm } from "./forms/add-order-form";
@@ -33,10 +28,86 @@ interface OrderItem {
 
 export function OrdersPage() {
   const { demoData } = useDemoContext();
-  const { orders } = useRestaurantContext();
+  const { orders, isLoading } = useRestaurantContext();
 
   // Use the new hook to get consistent data
   const displayOrders = useMixedData(demoData.orders, orders);
+
+  // Show loading state while data is being loaded
+  if (isLoading) {
+    return (
+      <div className="p-6 space-y-6">
+        {/* Header skeleton */}
+        <div className="flex justify-between items-center">
+          <div>
+            <Skeleton className="h-8 w-32 mb-2" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+          <Skeleton className="h-10 w-32" />
+        </div>
+
+        {/* Order Stats skeleton */}
+        <div className="grid gap-4 md:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i} className="border-neutral-200 bg-white">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-4" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-8" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Tabs and content skeleton */}
+        <div className="space-y-6">
+          <div className="flex space-x-1">
+            {[...Array(4)].map((_, i) => (
+              <Skeleton key={i} className="h-10 w-24" />
+            ))}
+          </div>
+
+          <Card className="border-neutral-200 bg-white">
+            <CardHeader>
+              <Skeleton className="h-6 w-24 mb-2" />
+              <Skeleton className="h-4 w-48" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <Skeleton className="w-12 h-12 rounded-lg" />
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Skeleton className="h-5 w-16" />
+                          <Skeleton className="h-4 w-2" />
+                          <Skeleton className="h-4 w-16" />
+                          <Skeleton className="h-4 w-2" />
+                          <Skeleton className="h-4 w-24" />
+                        </div>
+                        <Skeleton className="h-4 w-full mb-2" />
+                        <div className="flex items-center space-x-2">
+                          <Skeleton className="h-4 w-12" />
+                          <Skeleton className="h-6 w-16" />
+                        </div>
+                      </div>
+                    </div>
+                    <Skeleton className="h-6 w-20" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   // Fallback to empty array if no orders exist
   const currentOrders: OrderItem[] =

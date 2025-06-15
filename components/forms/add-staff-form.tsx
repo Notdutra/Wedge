@@ -41,7 +41,10 @@ export function AddStaffForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addStaff(formData);
+    addStaff({
+      ...formData,
+      status: formData.status as "active" | "break" | "off",
+    });
     setFormData({
       name: "",
       role: "",

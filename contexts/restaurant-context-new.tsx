@@ -6,9 +6,15 @@ import {
   useState,
   useEffect,
   type ReactNode,
-} from "react";
-
-// TypeScript interfaces for restaurant data
+} from "reainterface RestaurantContextType {
+  // Loading state
+  isLoading: boolean;
+  
+  // Orders
+  orders: Order[];
+  addOrder: (order: Omit<Order, 'id'>) => void;
+  updateOrder: (id: string, updates: Partial<Order>) => void;
+  deleteOrder: (id: string) => void;// TypeScript interfaces for restaurant data
 export interface Order {
   id: string;
   table: string;
@@ -108,9 +114,6 @@ const loadFromStorage = (key: string, defaultValue: unknown = []) => {
 };
 
 interface RestaurantContextType {
-  // Loading state
-  isLoading: boolean;
-
   // Orders
   orders: Order[];
   addOrder: (order: Omit<Order, "id">) => void;
@@ -165,40 +168,21 @@ export function useRestaurantContext() {
 
 export function RestaurantProvider({ children }: { children: ReactNode }) {
   // Initialize state with empty arrays to prevent hydration mismatches
-  const [isLoading, setIsLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [staff, setStaff] = useState<StaffMember[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [payments, setPayments] = useState<PaymentTransaction[]>([]);
-
-  // Load data from localStorage immediately after component mounts
+  
+  // Load data from localStorage after component mounts
   useEffect(() => {
-    // Load all data synchronously to minimize loading time
-    const loadedOrders = loadFromStorage(STORAGE_KEYS.orders) as Order[];
-    const loadedReservations = loadFromStorage(
-      STORAGE_KEYS.reservations,
-    ) as Reservation[];
-    const loadedStaff = loadFromStorage(STORAGE_KEYS.staff) as StaffMember[];
-    const loadedMenuItems = loadFromStorage(
-      STORAGE_KEYS.menuItems,
-    ) as MenuItem[];
-    const loadedInventory = loadFromStorage(
-      STORAGE_KEYS.inventory,
-    ) as InventoryItem[];
-    const loadedPayments = loadFromStorage(
-      STORAGE_KEYS.payments,
-    ) as PaymentTransaction[];
-
-    // Batch state updates
-    setOrders(loadedOrders);
-    setReservations(loadedReservations);
-    setStaff(loadedStaff);
-    setMenuItems(loadedMenuItems);
-    setInventory(loadedInventory);
-    setPayments(loadedPayments);
-    setIsLoading(false);
+    setOrders(loadFromStorage(STORAGE_KEYS.orders) as Order[]);
+    setReservations(loadFromStorage(STORAGE_KEYS.reservations) as Reservation[]);
+    setStaff(loadFromStorage(STORAGE_KEYS.staff) as StaffMember[]);
+    setMenuItems(loadFromStorage(STORAGE_KEYS.menuItems) as MenuItem[]);
+    setInventory(loadFromStorage(STORAGE_KEYS.inventory) as InventoryItem[]);
+    setPayments(loadFromStorage(STORAGE_KEYS.payments) as PaymentTransaction[]);
   }, []);
 
   // Save to localStorage whenever state changes
@@ -230,7 +214,10 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   const addOrder = (order: Omit<Order, "id">) => {
     setOrders((prev) => [
       ...prev,
-      { ...order, id: `#${String(prev.length + 1).padStart(3, "0")}` },
+      {
+        ...order,
+        id: `#${String(prev.length + 1).padStart(3, "0")}`,
+      },
     ]);
   };
 
@@ -313,7 +300,10 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   const addPayment = (payment: Omit<PaymentTransaction, "id">) => {
     setPayments((prev) => [
       ...prev,
-      { ...payment, id: `TXN${String(prev.length + 1).padStart(3, "0")}` },
+      {
+        ...payment,
+        id: `TXN${String(prev.length + 1).padStart(3, "0")}`,
+      },
     ]);
   };
 
@@ -336,7 +326,6 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   return (
     <RestaurantContext.Provider
       value={{
-        isLoading,
         orders,
         addOrder,
         updateOrder,

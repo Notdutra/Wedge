@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu, Bell, Settings, LogOut } from "lucide-react";
 import { DemoToggle } from "@/components/demo-toggle";
+import { WedgeLogo } from "@/components/wedge-logo";
 import {
   ZoneElement,
   BarrierElement,
@@ -32,9 +33,9 @@ import {
 } from "@/types/element-types";
 
 export default function FloorplanEditPageInner() {
-  // State
-  const [zones, setZones] = useState<(ZoneElement | BarrierElement)[]>([]);
-  const { tableTypes, tables, setTables } = useFloorplan();
+  // Use floorplan context for all element types
+  const { tableTypes, tables, setTables, zones, setZones, isLoading } =
+    useFloorplan();
   const [selectedElement, setSelectedElement] = useState<ElementType | null>(
     null,
   );
@@ -164,6 +165,7 @@ export default function FloorplanEditPageInner() {
       return null;
 
     const isTable =
+      selectedElement === "table" ||
       selectedElement.startsWith("TableType:") ||
       ["square", "rectangle", "circle"].includes(selectedElement);
 
@@ -184,6 +186,20 @@ export default function FloorplanEditPageInner() {
         count: 0,
       };
 
+      // Calculate the next table number for preview (same logic as createNewElement)
+      const existingTableNumbers = tables
+        .map((table) => {
+          const match =
+            table.label.match(/^(\d+)$/) || table.label.match(/^Table (\d+)$/);
+          return match ? parseInt(match[1], 10) : 0;
+        })
+        .filter((num) => num > 0);
+
+      const nextTableNumber =
+        existingTableNumbers.length > 0
+          ? Math.max(...existingTableNumbers) + 1
+          : 1;
+
       const preset = SHAPE_PRESETS[defaultType.shape];
       previewElement = {
         x: mousePosition.x - preset.width / 2,
@@ -192,10 +208,31 @@ export default function FloorplanEditPageInner() {
         height: preset.height,
         color: defaultType.color,
         type: "table" as const,
-        label: defaultType.label,
+        label: `Table ${nextTableNumber}`, // Show "Table 1", "Table 2", etc.
         seats: defaultType.seats,
       };
     } else {
+      // Calculate next zone number for preview, but barriers just use "Barrier"
+      let nextName;
+      if (selectedElement === "zone") {
+        const existingZoneNumbers = zones
+          .filter((zone) => zone.type === "zone")
+          .map((zone) => {
+            const match =
+              zone.name?.match(/^Zone (\d+)$/) || zone.name?.match(/^(\d+)$/);
+            return match ? parseInt(match[1], 10) : 0;
+          })
+          .filter((num) => num > 0);
+
+        const nextZoneNumber =
+          existingZoneNumbers.length > 0
+            ? Math.max(...existingZoneNumbers) + 1
+            : 1;
+        nextName = `Zone ${nextZoneNumber}`;
+      } else {
+        nextName = "Barrier";
+      }
+
       previewElement = {
         x: mousePosition.x - ZONE_PRESET.width / 2,
         y: mousePosition.y - ZONE_PRESET.height / 2,
@@ -203,7 +240,7 @@ export default function FloorplanEditPageInner() {
         height: ZONE_PRESET.height,
         color: selectedElement === "barrier" ? "#a3a3a3" : "#fef08a",
         type: selectedElement as "zone" | "barrier",
-        name: selectedElement === "barrier" ? "Barrier" : "Zone",
+        name: nextName,
       };
     }
 
@@ -381,9 +418,24 @@ export default function FloorplanEditPageInner() {
     const id = Date.now() + Math.floor(Math.random() * 1000);
 
     if (type === "zone") {
+      // Auto-increment zone number
+      const existingZoneNumbers = zones
+        .filter((zone) => zone.type === "zone")
+        .map((zone) => {
+          const match =
+            zone.name?.match(/^Zone (\d+)$/) || zone.name?.match(/^(\d+)$/);
+          return match ? parseInt(match[1], 10) : 0;
+        })
+        .filter((num) => num > 0);
+
+      const nextZoneNumber =
+        existingZoneNumbers.length > 0
+          ? Math.max(...existingZoneNumbers) + 1
+          : 1;
+
       return {
         id,
-        name: "Zone",
+        name: `Zone ${nextZoneNumber}`,
         x: x - ZONE_PRESET.width / 2,
         y: y - ZONE_PRESET.height / 2,
         width: ZONE_PRESET.width,
@@ -420,11 +472,25 @@ export default function FloorplanEditPageInner() {
       count: 0,
     };
 
+    // Auto-increment table number based on existing tables
+    const existingTableNumbers = tables
+      .map((table) => {
+        const match =
+          table.label.match(/^(\d+)$/) || table.label.match(/^Table (\d+)$/);
+        return match ? parseInt(match[1], 10) : 0;
+      })
+      .filter((num) => num > 0);
+
+    const nextTableNumber =
+      existingTableNumbers.length > 0
+        ? Math.max(...existingTableNumbers) + 1
+        : 1;
+
     const preset = SHAPE_PRESETS[defaultType.shape];
     return {
       id,
       type: "table" as const,
-      label: defaultType.label,
+      label: `Table ${nextTableNumber}`,
       seats: defaultType.seats,
       shape: defaultType.shape,
       color: defaultType.color,
@@ -504,6 +570,61 @@ export default function FloorplanEditPageInner() {
     }
   }, []);
 
+  // Show loading state while data is being loaded
+  if (isLoading) {
+    return (
+      <div className="h-screen flex bg-neutral-50">
+        {/* Loading skeleton for sidebar */}
+        <div className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0">
+          <div className="bg-white border-r border-neutral-200 p-4 space-y-4">
+            <div className="h-6 bg-neutral-200 rounded animate-pulse" />
+            <div className="space-y-2">
+              <div className="h-4 bg-neutral-200 rounded animate-pulse" />
+              <div className="h-4 bg-neutral-200 rounded w-3/4 animate-pulse" />
+            </div>
+          </div>
+        </div>
+
+        {/* Loading skeleton for main content */}
+        <div className="flex flex-1 flex-col lg:pl-64">
+          <div className="sticky top-0 z-40 flex h-14 sm:h-16 shrink-0 items-center gap-x-2 sm:gap-x-4 border-b border-neutral-200 bg-white px-3 sm:px-4 shadow-sm lg:px-6 xl:px-8">
+            <div className="h-8 w-8 bg-neutral-200 rounded animate-pulse" />
+            <div className="flex-1" />
+            <div className="h-8 w-24 bg-neutral-200 rounded animate-pulse" />
+            <div className="h-8 w-8 bg-neutral-200 rounded-full animate-pulse" />
+          </div>
+
+          <main className="flex-1 overflow-y-auto bg-neutral-50">
+            <div className="p-6 space-y-6">
+              <div className="flex justify-between items-center">
+                <div className="space-y-2">
+                  <div className="h-8 w-64 bg-neutral-200 rounded animate-pulse" />
+                  <div className="h-4 w-96 bg-neutral-200 rounded animate-pulse" />
+                </div>
+                <div className="flex gap-2">
+                  <div className="h-10 w-20 bg-neutral-200 rounded animate-pulse" />
+                  <div className="h-10 w-32 bg-neutral-200 rounded animate-pulse" />
+                </div>
+              </div>
+
+              <div className="flex-1 p-6">
+                <div className="grid gap-6 lg:grid-cols-4 h-full">
+                  <div className="lg:col-span-3">
+                    <div className="border border-neutral-200 rounded-lg h-96 bg-neutral-100 animate-pulse" />
+                  </div>
+                  <div className="space-y-4">
+                    <div className="h-32 bg-neutral-200 rounded animate-pulse" />
+                    <div className="h-32 bg-neutral-200 rounded animate-pulse" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex bg-neutral-50">
       {/* Desktop sidebar */}
@@ -541,6 +662,11 @@ export default function FloorplanEditPageInner() {
               />
             </SheetContent>
           </Sheet>
+
+          {/* Logo */}
+          <div className="flex items-center">
+            <WedgeLogo pos={true} />
+          </div>
 
           <div className="flex flex-1 gap-x-2 sm:gap-x-4 self-stretch lg:gap-x-6">
             <div className="flex flex-1 items-center">

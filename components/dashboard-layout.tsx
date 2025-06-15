@@ -130,7 +130,7 @@ export const DashboardLayout = React.memo(function DashboardLayout({
   const Sidebar = () => (
     <div className="flex h-full flex-col bg-white border-r border-neutral-200">
       <div className="flex h-14 sm:h-16 shrink-0 items-center px-3 sm:px-4 border-b border-neutral-200">
-        <WedgeLogo />
+        <WedgeLogo pos={true} />
       </div>
       <nav className="flex-1 space-y-1 px-2 sm:px-3 py-3 sm:py-4 overflow-y-auto">
         {userNavigation.map((item) => {

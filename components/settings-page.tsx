@@ -29,12 +29,23 @@ import {
   Navigation,
   RotateCcw,
   User,
+  Package,
 } from "lucide-react";
 import { useNavbarContext } from "@/contexts/navbar-context";
+import { useRestaurantContext } from "@/contexts/restaurant-context";
 
 export function SettingsPage() {
   const { navbarSettings, updateNavbarSettings, resetToDefaults } =
     useNavbarContext();
+  const {
+    orders,
+    reservations,
+    staff,
+    menuItems,
+    inventory,
+    payments,
+    clearAllData,
+  } = useRestaurantContext();
 
   const navbarFeatures = [
     {
@@ -91,10 +102,11 @@ export function SettingsPage() {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="restaurant">Restaurant</TabsTrigger>
           <TabsTrigger value="navbar">Navigation</TabsTrigger>
+          <TabsTrigger value="data">Data</TabsTrigger>
           <TabsTrigger value="pos">POS</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="payments">Payments</TabsTrigger>
@@ -327,6 +339,104 @@ export function SettingsPage() {
                   you can hide the Reservations section. Changes apply
                   immediately to all users with access to those features.
                 </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="data" className="space-y-6">
+          <Card className="border-neutral-200 bg-white">
+            <CardHeader>
+              <CardTitle className="flex items-center text-neutral-900">
+                <Package className="w-5 h-5 mr-2 text-lime-600" />
+                Data Management
+              </CardTitle>
+              <CardDescription>
+                Manage your restaurant data and storage
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-medium text-blue-900 mb-2">
+                    Current Data Storage
+                  </h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <span className="text-blue-700">Orders:</span>
+                      <span className="font-medium ml-2 text-blue-900">
+                        {orders.length}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-blue-700">Reservations:</span>
+                      <span className="font-medium ml-2 text-blue-900">
+                        {reservations.length}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-blue-700">Staff:</span>
+                      <span className="font-medium ml-2 text-blue-900">
+                        {staff.length}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-blue-700">Menu Items:</span>
+                      <span className="font-medium ml-2 text-blue-900">
+                        {menuItems.length}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-blue-700">Inventory:</span>
+                      <span className="font-medium ml-2 text-blue-900">
+                        {inventory.length}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-blue-700">Payments:</span>
+                      <span className="font-medium ml-2 text-blue-900">
+                        {payments.length}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <h4 className="font-medium text-amber-900 mb-2">
+                    ⚠️ Danger Zone
+                  </h4>
+                  <p className="text-sm text-amber-700 mb-4">
+                    This action will permanently delete all your restaurant data
+                    including orders, reservations, staff, menu items,
+                    inventory, and payments. This cannot be undone.
+                  </p>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      if (
+                        globalThis.confirm?.(
+                          "Are you sure you want to delete ALL data? This cannot be undone!",
+                        )
+                      ) {
+                        clearAllData();
+                        globalThis.alert?.("All data has been cleared!");
+                      }
+                    }}
+                  >
+                    Clear All Data
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h4 className="font-medium text-green-900 mb-2">
+                    ✅ Data Persistence
+                  </h4>
+                  <p className="text-sm text-green-700">
+                    Your data is automatically saved to your browser's local
+                    storage. It will persist across page refreshes and browser
+                    restarts, but is specific to this browser.
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>

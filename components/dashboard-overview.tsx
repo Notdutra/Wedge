@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   ShoppingCart,
   Clock,
@@ -32,7 +33,7 @@ import {
 
 export function DashboardOverview() {
   const { isDemoMode, demoData } = useDemoContext();
-  const { orders, reservations, staff } = useRestaurantContext();
+  const { orders, reservations, staff, isLoading } = useRestaurantContext();
 
   // Use the new hooks to get consistent data
   const currentOrders = useMixedData(demoData.orders, orders);
@@ -76,6 +77,109 @@ export function DashboardOverview() {
           },
         ]
       : getEmptyStaffStatus();
+
+  if (isLoading) {
+    return (
+      <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
+        <div>
+          <Skeleton className="h-8 w-48 mb-2" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+
+        {/* Stats skeleton */}
+        <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i} className="border-neutral-200 bg-white">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-4" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-7 w-12 mb-1" />
+                <Skeleton className="h-3 w-16" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Content sections skeleton */}
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+          <Card className="lg:col-span-2 border-neutral-200 bg-white">
+            <CardHeader>
+              <Skeleton className="h-6 w-32 mb-2" />
+              <Skeleton className="h-4 w-48" />
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex justify-between items-center py-2">
+                  <div className="space-y-1">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                  <Skeleton className="h-6 w-16" />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            <Card className="border-neutral-200 bg-white">
+              <CardHeader>
+                <Skeleton className="h-5 w-32 mb-2" />
+                <Skeleton className="h-4 w-24" />
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex justify-between items-center">
+                    <div className="space-y-1">
+                      <Skeleton className="h-4 w-20" />
+                      <Skeleton className="h-3 w-16" />
+                    </div>
+                    <Skeleton className="h-6 w-12" />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Bottom sections skeleton */}
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
+          <Card className="border-neutral-200 bg-white">
+            <CardHeader>
+              <Skeleton className="h-5 w-32" />
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <div className="flex justify-between">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                  <Skeleton className="h-2 w-full" />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="border-neutral-200 bg-white">
+            <CardHeader>
+              <Skeleton className="h-5 w-32 mb-2" />
+              <Skeleton className="h-4 w-24" />
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-6 w-12" />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
@@ -167,7 +271,7 @@ export function DashboardOverview() {
                           className={`text-xs ${
                             order.status === "ready"
                               ? "bg-lime-100 text-lime-800 border-lime-200"
-                              : order.status === "served"
+                              : order.status === "delivered"
                                 ? "bg-green-100 text-green-800 border-green-200"
                                 : "bg-yellow-100 text-yellow-800 border-yellow-200"
                           }`}
@@ -178,7 +282,7 @@ export function DashboardOverview() {
                           {order.status === "ready" && (
                             <AlertCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
                           )}
-                          {order.status === "served" && (
+                          {order.status === "delivered" && (
                             <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
                           )}
                           {order.status}

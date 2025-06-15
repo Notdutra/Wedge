@@ -29,26 +29,27 @@ export const ElementsCard = React.memo<ElementsCardProps>(
           </div>
           <button
             className={`flex items-center gap-3 border rounded p-3 w-full shadow-sm focus:ring-2 focus:ring-lime-400 transition-all duration-200 ${
-              selectedElement === "barrier"
+              selectedElement === "table"
                 ? "ring-2 ring-lime-400 bg-lime-50 border-lime-300 shadow-md"
                 : "bg-neutral-50 hover:bg-neutral-100 border-neutral-200"
             }`}
             type="button"
-            aria-label="Select Barrier Element"
-            onClick={() => handleElementSelect("barrier")}
+            aria-label="Select Table Element"
+            onClick={() => handleElementSelect("table")}
           >
-            <span className="w-4 h-1 bg-neutral-400 rounded" />
+            <span className="w-4 h-4 bg-lime-100 rounded" />
             <div className="text-left">
               <span
-                className={`text-sm ${selectedElement === "barrier" ? "text-lime-700 font-medium" : "text-neutral-700"}`}
+                className={`text-sm ${selectedElement === "table" ? "text-lime-700 font-medium" : "text-neutral-700"}`}
               >
-                Wall / Barrier
+                Table (Default)
               </span>
               <p className="text-xs text-neutral-500 mt-0.5">
-                Add walls, pillars, or dividers
+                Basic dining table
               </p>
             </div>
           </button>
+
           <button
             className={`flex items-center gap-3 border rounded p-3 w-full shadow-sm focus:ring-2 focus:ring-lime-400 transition-all duration-200 ${
               selectedElement === "zone"
@@ -71,28 +72,30 @@ export const ElementsCard = React.memo<ElementsCardProps>(
               </p>
             </div>
           </button>
+
           <button
             className={`flex items-center gap-3 border rounded p-3 w-full shadow-sm focus:ring-2 focus:ring-lime-400 transition-all duration-200 ${
-              selectedElement === "table"
+              selectedElement === "barrier"
                 ? "ring-2 ring-lime-400 bg-lime-50 border-lime-300 shadow-md"
                 : "bg-neutral-50 hover:bg-neutral-100 border-neutral-200"
             }`}
             type="button"
-            aria-label="Select Table Element"
-            onClick={() => handleElementSelect("table")}
+            aria-label="Select Barrier Element"
+            onClick={() => handleElementSelect("barrier")}
           >
-            <span className="w-4 h-4 bg-lime-100 rounded" />
+            <span className="w-4 h-1 bg-neutral-400 rounded" />
             <div className="text-left">
               <span
-                className={`text-sm ${selectedElement === "table" ? "text-lime-700 font-medium" : "text-neutral-700"}`}
+                className={`text-sm ${selectedElement === "barrier" ? "text-lime-700 font-medium" : "text-neutral-700"}`}
               >
-                Table (Default)
+                Wall / Barrier
               </span>
               <p className="text-xs text-neutral-500 mt-0.5">
-                Basic dining table
+                Add walls, pillars, or dividers
               </p>
             </div>
           </button>
+
           {tableTypes.map((type) => (
             <button
               key={type.id}
