@@ -52,6 +52,7 @@ export function AddReservationForm({
     addReservation({
       ...formData,
       party: Number.parseInt(formData.party),
+      status: "pending" as const,
     });
     setFormData({
       name: "",
