@@ -22,7 +22,7 @@ importers:
         version: 3.2.2(react@18.3.1)
       '@hookform/resolvers':
         specifier: ^3.10.0
-        version: 3.10.0(react-hook-form@7.57.0(react@18.3.1))
+        version: 3.10.0(react-hook-form@7.58.0(react@18.3.1))
       '@radix-ui/react-accordion':
         specifier: 1.2.2
         version: 1.2.2(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -144,8 +144,8 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-hook-form:
-        specifier: ^7.57.0
-        version: 7.57.0(react@18.3.1)
+        specifier: ^7.58.0
+        version: 7.58.0(react@18.3.1)
       react-resizable-panels:
         specifier: ^2.1.9
         version: 2.1.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -168,9 +168,15 @@ importers:
         specifier: ^3.25.64
         version: 3.25.64
     devDependencies:
+      '@eslint/eslintrc':
+        specifier: ^3.3.1
+        version: 3.3.1
       '@eslint/js':
         specifier: ^9.29.0
         version: 9.29.0
+      '@next/eslint-plugin-next':
+        specifier: ^15.3.3
+        version: 15.3.3
       '@types/node':
         specifier: ^22.15.31
         version: 22.15.31
@@ -2559,8 +2565,8 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-hook-form@7.57.0:
-    resolution: {integrity: sha512-RbEks3+cbvTP84l/VXGUZ+JMrKOS8ykQCRYdm5aYsxnDquL0vspsyNhGRO7pcH6hsZqWlPOjLye7rJqdtdAmlg==}
+  react-hook-form@7.58.0:
+    resolution: {integrity: sha512-zGijmEed35oNfOfy7ub99jfjkiLhHwA3dl5AgyKdWC6QQzhnc7tkWewSa+T+A2EpLrc6wo5DUoZctS9kufWJjA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -3127,9 +3133,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@hookform/resolvers@3.10.0(react-hook-form@7.57.0(react@18.3.1))':
+  '@hookform/resolvers@3.10.0(react-hook-form@7.58.0(react@18.3.1))':
     dependencies:
-      react-hook-form: 7.57.0(react@18.3.1)
+      react-hook-form: 7.58.0(react@18.3.1)
 
   '@humanfs/core@0.19.1': {}
 
@@ -5501,7 +5507,7 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-hook-form@7.57.0(react@18.3.1):
+  react-hook-form@7.58.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 

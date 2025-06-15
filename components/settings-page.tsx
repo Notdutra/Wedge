@@ -432,9 +432,9 @@ export function SettingsPage() {
                     ✅ Data Persistence
                   </h4>
                   <p className="text-sm text-green-700">
-                    Your data is automatically saved to your browser's local
-                    storage. It will persist across page refreshes and browser
-                    restarts, but is specific to this browser.
+                    Your data is automatically saved to your browser&apos;s
+                    local storage. It will persist across page refreshes and
+                    browser restarts, but is specific to this browser.
                   </p>
                 </div>
               </div>

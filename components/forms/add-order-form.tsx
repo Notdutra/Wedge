@@ -35,7 +35,7 @@ export function AddOrderForm({
   variant?: "plus" | "cart";
 }) {
   const { addOrder } = useRestaurantContext();
-  const { isDemoMode, demoData } = useDemoContext();
+  const { demoData } = useDemoContext();
   const { menuItems, staff } = useRestaurantContext();
   const [open, setOpen] = useState(false);
 
@@ -103,7 +103,7 @@ export function AddOrderForm({
     addOrder({
       table: formData.table,
       items: formData.items,
-      status: "pending",
+      status: "preparing",
       time: timeString,
       total: Number(total.toFixed(2)),
       server: formData.server,
