@@ -46,7 +46,7 @@ Thanks for your interest in contributing! This guide will help you get started a
    pnpm test
    ```
 
-8. **Push your branch** and open a **Pull Request** against the main repository. Include a clear description of your changes and the motivation behind them.
+8. **Push your branch** and open a **Pull Request** against the `dev` branch of the main repository.
 
 ## Guidelines
 
@@ -57,11 +57,11 @@ Thanks for your interest in contributing! This guide will help you get started a
 
 ## Reporting Issues
 
-If you find a bug or want to request a feature, please [open an issue](link-to-issues). Include as much detail as possible.
+If you find a bug or want to request a feature, please [open an issue](https://github.com/notdutra/wedge/issues). Include as much detail as possible.
 
 ## Code of Conduct
 
-Please read our [Code of Conduct](link-to-code-of-conduct) to understand the standards of behavior expected in this project.
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to understand the standards of behavior expected in this project.
 
 ## Need Help?
 
