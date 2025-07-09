@@ -49,6 +49,15 @@ Wedge includes a built-in demo mode with sample data for easy onboarding and sho
 
 To enable demo mode, use the Demo Mode toggle button at the top right corner of the dashboard.
 
+## Contributing
+
+We welcome contributions of all kinds! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to get started, coding standards, and the pull request process.
+
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+If you find a bug or have a feature request, please [open an issue](https://github.com/Notdutra/Wedge/issues).
+
+
 ## License
 
 Licensed under the Apache License, Version 2.0.  
